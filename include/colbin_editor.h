@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "key/colbin.h"
 
 class ColbinEditor {
 public:
@@ -19,5 +20,20 @@ private:
     ColbinEditor();
     ~ColbinEditor();
 
-    bool isRunning();
+    /* gui functions */
+    void Menu();
+
+    /* file io */
+
+    // loads file from mFileOpen
+    void LoadFile();
+    
+    /* editor */
+    
+    // renders lines
+    void RenderFile();
+private:
+    std::string mColbinFilepath;
+    bool mFileOpen;
+    std::unique_ptr<key::colbin::wrapper::Colbin> mpColbinFile;
 };

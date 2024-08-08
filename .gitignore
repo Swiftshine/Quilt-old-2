@@ -2,3 +2,4 @@ include/lib/
 lib/*.o
 lib/*.a
 *.exe
+*.ini

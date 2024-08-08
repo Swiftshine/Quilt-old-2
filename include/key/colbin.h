@@ -75,6 +75,9 @@ namespace key::colbin::wrapper {
 
         Entry* At(u32 index);
 
+        u32 GetEntryCount();
+        u32 GetCollisionTypeCount();
+        
         void Read(std::ifstream& file);
         void Write(std::ofstream& file);
     private:

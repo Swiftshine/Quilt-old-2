@@ -85,13 +85,14 @@ void Application::Run() {
 void Application::Menu() {
     ImGui::BeginMainMenuBar();
 
-    if (ImGui::BeginMenu("Editor")) {
+    if (ImGui::BeginMenu("Quilt")) {
         if (ImGui::MenuItem("Select RomFS Path")) {
             nfdu8char_t* path;
             nfdresult_t result = NFD_PickFolderU8(&path, nullptr);
 
             switch (result) {
-                case NFD_CANCEL:break;
+                case NFD_CANCEL: break;
+                
                 case NFD_OKAY: {
                     mRomFSPath = path;
                     NFD_FreePathU8(path);

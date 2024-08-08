@@ -22,6 +22,7 @@ struct Vec2f {
     Vec2f() { x = 0; y = 0; }
     Vec2f(f32 nx, f32 ny) { x = nx; y = ny; }
     Vec2f(const Vec2f& other) { x = other.x; y = other.y; }
+    
     void Swap() { x = SwapF32(x); y = SwapF32(y); }
     f32 x, y;
 };

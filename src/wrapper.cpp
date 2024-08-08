@@ -135,3 +135,15 @@ void wrapper::Colbin::Write(std::ofstream& file) {
         file.write(type, 0x20);
     }
 }
+
+wrapper::Entry* wrapper::Colbin::At(u32 index) {
+    if (index >= mEntries.size()) {
+        return nullptr;
+    }
+
+    return &mEntries[index];
+}
+
+u32 wrapper::Colbin::GetEntryCount() { return mEntries.size(); }
+
+u32 wrapper::Colbin::GetCollisionTypeCount() { return mCollisionTypes.size(); }

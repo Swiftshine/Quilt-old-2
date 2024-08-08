@@ -2,7 +2,6 @@
 
 
 #include "common.h"
-#include "applog.h"
 
 #include "colbin_editor.h"
 
