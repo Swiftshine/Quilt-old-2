@@ -70,6 +70,8 @@ void Application::Run() {
 
         Menu();
 
+        ColbinEditor::Instance()->Run();
+
         // ----
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -99,18 +101,21 @@ void Application::Menu() {
             }
         }
 
+        if (ImGui::MenuItem("Colbin Editor")) {
+            ColbinEditor::IsRunning = true;
+        }
+
+        /*
         if (ImGui::MenuItem("Level Editor")) {
             // will be implemented soon...
         }
 
-        if (ImGui::MenuItem("Colbin Editor")) {
-            // will be implemented soon...
-        }
 
         if (ImGui::MenuItem("GfArch Utility")) {
             // will be implemented soon...
         }
-        
+        */
+
         /*
         if (ImGui::MenuItem("MNEB Editor")) {
             // planned, but format is not known

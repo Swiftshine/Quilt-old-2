@@ -1,22 +1,10 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#include <imgui_internal.h>
 
-#include <nfd.h>
-
-#include <filesystem>
-#include <string>
-#include <iostream>
-
-namespace fs = std::filesystem;
-
+#include "common.h"
 #include "applog.h"
 
+#include "colbin_editor.h"
 
 const int WINDOW_WIDTH  = 1280;
 const int WINDOW_HEIGHT = 720;

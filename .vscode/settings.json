@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "iostream": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "cstdint": "cpp",
+        "compare": "cpp",
+        "iosfwd": "cpp",
+        "memory": "cpp",
+        "*.tcc": "cpp"
     }
 }

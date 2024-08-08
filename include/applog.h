@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
-#include <format>
 
 namespace AppLog {
     template <typename T>
