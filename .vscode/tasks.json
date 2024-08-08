@@ -32,6 +32,8 @@
                 "-luser32",
                 "-lshell32",
                 "-lopengl32",
+                "-lcomdlg32",
+                "-lole32",
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
