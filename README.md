@@ -9,7 +9,7 @@ Before compiling Quilt, you will first need to download or compile the following
 - [GLFW 3.3.10](https://github.com/glfw/glfw/releases/tag/3.3.10)
 - [Glad](https://glad.dav1d.de/)
 - [ImGui docking branch](https://github.com/ocornut/imgui/tree/docking)
-- [tinyfiledialogs](https://sourceforge.net/projects/tinyfiledialogs/)
+- [Native File Dialog Extended](https://github.com/btzy/nativefiledialog-extended)
 - [C++ JSON Parser](https://github.com/nlohmann/json)
 
 Should you compile any source files yourself, place all objects into the `lib` folder. When prompted to move a header file into the project, create any folders that don't exist if necessary.
@@ -53,11 +53,11 @@ Move the following header files into `include/lib/imgui/`:
 - `imgui_impl_opengl3.h`
 - `imgui_impl_opengl3_loader.h`
 
-### tinyfiledialogs
+### Native File Dialog Extended
 > [!TIP]
-> If you want to compile **tinyfiledialogs** alongside Quilt instead of seperately, you can skip this.
+> If you want to compile **Native File Dialog Extended** alongside Quilt instead of seperately, you can skip compiling it. Be sure to compile the appropriate files for your OS.
 
-Move `tinyfiledialogs.h` into `include/lib/`.
+Move `nfd.h` into `include/lib/`.
 
 ### C++ JSON Parser
 > [!NOTE]
