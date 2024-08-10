@@ -1,8 +1,7 @@
 #include "application.h"
 
 Application::Application()
-    : mpMainWindow(nullptr)  
-    , mHasValidRomFSPath(false)  
+    : mHasValidRomFSPath(false)  
 { }
 
 Application::~Application() {
@@ -24,14 +23,14 @@ bool Application::Setup() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
 
-    mpMainWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Quilt", nullptr, nullptr);
+    quilt::MainWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Quilt", nullptr, nullptr);
 
-    if (!mpMainWindow) {
+    if (!quilt::MainWindow) {
         glfwTerminate();
         AppLog::Error("Failed to create GLFW window.");
     }
 
-    glfwMakeContextCurrent(mpMainWindow);
+    glfwMakeContextCurrent(quilt::MainWindow);
     gladLoadGL();
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -39,7 +38,7 @@ bool Application::Setup() {
     ImGui::CreateContext();
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(mpMainWindow, true);
+    ImGui_ImplGlfw_InitForOpenGL(quilt::MainWindow, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
     NFD_Init();
@@ -54,12 +53,12 @@ void Application::Cleanup() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    glfwDestroyWindow(mpMainWindow);
+    glfwDestroyWindow(quilt::MainWindow);
     glfwTerminate();
 }
 
 void Application::Run() {
-    while (!glfwWindowShouldClose(mpMainWindow)) {
+    while (!glfwWindowShouldClose(quilt::MainWindow)) {
         glClearColor(0, 0, 0, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_NewFrame();
@@ -72,10 +71,14 @@ void Application::Run() {
 
         ColbinEditor::Instance()->Run();
 
+        #if DEBUG
+        DebugWindow();
+        #endif
+        
         // ----
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(mpMainWindow);
+        glfwSwapBuffers(quilt::MainWindow);
         glfwPollEvents();
     }
 }

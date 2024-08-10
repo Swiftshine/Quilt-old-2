@@ -24,16 +24,19 @@ private:
     void Menu();
 
     /* file io */
-
+    void OpenFile();
+    void SaveFile(bool saveAs = false);
     // loads file from mFileOpen
     void LoadFile();
     
     /* editor */
     
     // renders lines
+    void FileProperties();
     void RenderFile();
 private:
     std::string mColbinFilepath;
     bool mFileOpen;
     std::unique_ptr<key::colbin::wrapper::Colbin> mpColbinFile;
+    Camera mCamera;
 };

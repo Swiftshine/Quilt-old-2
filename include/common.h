@@ -9,7 +9,6 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_internal.h>
-
 #include <nfd.h>
 
 #include <filesystem>
@@ -19,6 +18,7 @@
 #include <vector>
 #include <fstream>
 
+#include "camera.h"
 #include "types.h"
 #include "applog.h"
 
@@ -26,31 +26,57 @@ namespace fs = std::filesystem;
 
 const f32 SCALE_FACTOR = 100.0f;
 
+// a collection of utility functions
+
 namespace quilt {
-    // This function assumes the input point has not been properly scaled and flipped.
-    static ImVec2 ToWindowCenter(Vec2f& original, bool flip = false) {
-        ImVec2 windowPos = ImGui::GetWindowPos();
-        ImVec2 windowSize = ImGui::GetWindowSize();
 
-        ImVec2 windowCenter = ImVec2(windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f);
 
-        float s = flip ? -1.0f : 1.0f;
-        
-        ImVec2 point = ImVec2((SCALE_FACTOR * original.x * s) + windowCenter.x, (SCALE_FACTOR * original.y * s) + windowCenter.y);
-
-        return point;
+    static ImVec2 ToImVec2(Vec2f v) {
+        return ImVec2(v.x, v.y);
     }
 
-    static ImVec2 ToWindowCenter(ImVec2& original, bool flip = false) {
-        ImVec2 windowPos = ImGui::GetWindowPos();
-        ImVec2 windowSize = ImGui::GetWindowSize();
+    static Vec2f ToVec2f(ImVec2 v) {
+        return Vec2f(v.x, v.y);
+    }
 
-        ImVec2 windowCenter = ImVec2(windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f);
+    static void AlignOutstream(std::ofstream& file, u32 alignment) {
+        const char zero = 0;
+        if (file.tellp() % alignment != 0) {
+            for (auto i = 0; i < (file.tellp() % alignment); i++) {
+                file.write(&zero, 1);
+            }
+        }
+    }
 
-        float s = flip ? -1.0f : 1.0f;
-        
-        ImVec2 point = ImVec2((SCALE_FACTOR * original.x * s) + windowCenter.x, (SCALE_FACTOR * original.y * s) + windowCenter.y);
+    static ImVec2 ToWindow(Camera& camera, Vec2f& worldPosition) {
+        ImVec2 result;
+        result.x = worldPosition.x * camera.zoom + camera.x;
+        result.y = worldPosition.y * camera.zoom + camera.y;
+        result.y *= -1.0;
+        return result;
+    }
 
-        return point;
+    static ImVec2 ToWindow(Camera& camera, ImVec2& worldPosition) {
+        ImVec2 result;
+        result.x = worldPosition.x * camera.zoom + camera.x;
+        result.y = worldPosition.y * camera.zoom + camera.y;
+        result.y *= -1.0;
+        return result;
+    }
+
+    static Vec2f ToWorld(Camera& camera, Vec2f& windowPosition) {
+        Vec2f result;
+        result.x = (windowPosition.x - camera.x) / camera.zoom;
+        result.y = (windowPosition.y - camera.y) / camera.zoom;
+        result.y *= -1.0;
+        return result;
+    }
+
+    static Vec2f ToWorld(Camera& camera, ImVec2& windowPosition) {
+        Vec2f result;
+        result.x = (windowPosition.x - camera.x) / camera.zoom;
+        result.y = (windowPosition.y - camera.y) / camera.zoom;
+        result.y *= -1.0;
+        return result;
     }
 }

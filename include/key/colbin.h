@@ -70,11 +70,14 @@ namespace key::colbin::wrapper {
         ~Colbin();
 
         void Add();
-
         void Remove(u32 index);
 
-        Entry* At(u32 index);
 
+        f32 GetUnk0();
+        void SetUnk0(f32 newval);
+        Entry* GetEntry(u32 index);
+        std::string GetCollisionType(u32 index);
+        
         u32 GetEntryCount();
         u32 GetCollisionTypeCount();
         

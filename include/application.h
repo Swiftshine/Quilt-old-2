@@ -1,8 +1,12 @@
 #pragma once
 
+#define DEBUG false
+
+#if DEBUG
+#include "debug_window.h"
+#endif
 
 #include "common.h"
-
 #include "colbin_editor.h"
 
 const int WINDOW_WIDTH  = 1280;
@@ -34,7 +38,6 @@ private:
 
     void Menu();
 private:
-    GLFWwindow* mpMainWindow;
     std::string mRomFSPath;
     bool mHasValidRomFSPath;
 };

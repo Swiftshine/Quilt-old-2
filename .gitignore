@@ -3,3 +3,4 @@ lib/*.o
 lib/*.a
 *.exe
 *.ini
+debug_*.*

@@ -1,5 +1,6 @@
 #include "key/colbin.h"
 #include "applog.h"
+#include "common.h"
 
 using namespace key::colbin;
 
@@ -128,15 +129,26 @@ void wrapper::Colbin::Write(std::ofstream& file) {
     file.write((char*)&numCollisionTypes, 4);
 
     for (auto i = 0; i < mCollisionTypes.size(); i++) {
-        // put chars into buffer first to ensure safe writing
+        // put chars into zeroed-out buffer first to ensure writing data of size 0x20
 
-        char type[0x20];
-        std::memcpy(type, mCollisionTypes[i].c_str(), 0x20);
+        char type[0x20] = {0};
+        std::memcpy(type, mCollisionTypes[i].c_str(), mCollisionTypes[i].length());
         file.write(type, 0x20);
     }
+
+    // align to 32-bytes
+    quilt::AlignOutstream(file, 0x20);
 }
 
-wrapper::Entry* wrapper::Colbin::At(u32 index) {
+f32 wrapper::Colbin::GetUnk0() {
+    return mUnk0;
+}
+
+void wrapper::Colbin::SetUnk0(f32 newval) {
+    mUnk0 = newval;
+}
+
+wrapper::Entry* wrapper::Colbin::GetEntry(u32 index) {
     if (index >= mEntries.size()) {
         return nullptr;
     }
@@ -144,6 +156,13 @@ wrapper::Entry* wrapper::Colbin::At(u32 index) {
     return &mEntries[index];
 }
 
+std::string wrapper::Colbin::GetCollisionType(u32 index) {
+    if (index >= mCollisionTypes.size()) {
+        return "";
+    }
+
+    return mCollisionTypes[index];
+}
 u32 wrapper::Colbin::GetEntryCount() { return mEntries.size(); }
 
 u32 wrapper::Colbin::GetCollisionTypeCount() { return mCollisionTypes.size(); }
