@@ -23,7 +23,7 @@ void ColbinEditor::Run() {
 
     Menu();
 
-    ImGui::Text("Camera (X, Y, Zoom): %f, %f, %f", mCamera.x, mCamera.y, mCamera.zoom);
+    ImGui::Text("Camera (X, Y, Zoom, Speed): %f, %f, %f, %f", mCamera.x, mCamera.y, mCamera.zoom, mCamera.speed);
 
     FileProperties();
     RenderFile();

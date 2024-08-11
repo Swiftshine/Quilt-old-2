@@ -19,5 +19,5 @@ public:
     void Update();
 public:
     void* mpOwner;
-    float x, y, zoom;
+    float x, y, zoom, speed;
 };

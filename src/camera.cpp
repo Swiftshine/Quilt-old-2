@@ -15,6 +15,7 @@ Camera::Camera()
     , x(0)
     , y(0)
     , zoom(1.0f)
+    , speed(1.0f)
 { }
 
 Camera::Camera(void* newOwner)
@@ -22,6 +23,7 @@ Camera::Camera(void* newOwner)
     , x(0)
     , y(0)
     , zoom(1.0f)
+    , speed(0.5f)
 { }
 
 Camera::~Camera() {
@@ -31,32 +33,47 @@ Camera::~Camera() {
 void Camera::Update() {
     if (!ImGui::IsWindowFocused()) return;
 
+    if (ImGui::IsKeyPressed(ImGuiKey_R)) {
+        x = 0;
+        y = 0;
+        zoom = 1.0f;
+        return;
+    }
 
     if (ImGui::IsKeyDown(ImGuiKey_UpArrow)) {
-        y -= 1.0f;
+        y -= speed;
     }
 
     if (ImGui::IsKeyDown(ImGuiKey_DownArrow)) {
-        y += 1.0f;
+        y += speed;
     }
 
     if (ImGui::IsKeyDown(ImGuiKey_LeftArrow)) {
-        x += 1.0f;
+        x += speed;
     }
 
     if (ImGui::IsKeyDown(ImGuiKey_RightArrow)) {
-        x -= 1.0f;
+        x -= speed;
     }
 
     if (!ImGui::IsWindowHovered()) return;
 
     ImGuiIO& io = ImGui::GetIO();
 
-    if (io.MouseWheel > 0.0f) {
-        zoom += 0.2f;
-    } else if (io.MouseWheel < 0.0f) {
-        zoom -= 0.2f;
+    if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
+        if (io.MouseWheel > 0.0f) {
+            speed += 0.1f;
+        } else if (io.MouseWheel < 0.0f) {
+            speed -= 0.1f;
+        }
+    } else {
+        if (io.MouseWheel > 0.0f) {
+            zoom += 0.2f;
+        } else if (io.MouseWheel < 0.0f) {
+            zoom -= 0.2f;
+        }
     }
 
     if (zoom < 1.0f) zoom = 1.0f;
+    if (speed < 0.1f) speed = 0.1f;
 }

@@ -24,7 +24,7 @@
 
 namespace fs = std::filesystem;
 
-const f32 SCALE_FACTOR = 100.0f;
+const f32 SCALE_FACTOR = 5.0f;
 
 // a collection of utility functions
 
