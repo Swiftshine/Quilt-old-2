@@ -52,6 +52,8 @@ namespace quilt {
         ImVec2 result;
         result.x = worldPosition.x * camera.zoom + camera.x;
         result.y = worldPosition.y * camera.zoom + camera.y;
+        result.x *= SCALE_FACTOR;
+        result.y *= SCALE_FACTOR;
         result.y *= -1.0;
         return result;
     }
@@ -60,6 +62,8 @@ namespace quilt {
         ImVec2 result;
         result.x = worldPosition.x * camera.zoom + camera.x;
         result.y = worldPosition.y * camera.zoom + camera.y;
+        result.x *= SCALE_FACTOR;
+        result.y *= SCALE_FACTOR;
         result.y *= -1.0;
         return result;
     }

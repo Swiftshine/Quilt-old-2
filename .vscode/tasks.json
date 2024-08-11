@@ -22,6 +22,7 @@
                 
                 // Source files
                 "${workspaceFolder}/src/*.cpp",
+                "${workspaceFolder}/src/*/*.cpp",
                 "-o",
                 "${workspaceFolder}/Quilt",
                 // Objects

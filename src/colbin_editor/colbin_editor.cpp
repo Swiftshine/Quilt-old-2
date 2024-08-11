@@ -1,4 +1,4 @@
-#include "colbin_editor.h"
+#include "colbin_editor/colbin_editor.h"
 
 bool ColbinEditor::IsRunning = false;
 

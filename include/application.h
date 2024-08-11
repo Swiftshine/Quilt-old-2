@@ -7,7 +7,7 @@
 #endif
 
 #include "common.h"
-#include "colbin_editor.h"
+#include "colbin_editor/colbin_editor.h"
 
 const int WINDOW_WIDTH  = 1280;
 const int WINDOW_HEIGHT = 720;
