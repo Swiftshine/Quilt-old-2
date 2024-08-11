@@ -22,7 +22,7 @@
                 
                 // Source files
                 "${workspaceFolder}/src/*.cpp",
-                "${workspaceFolder}/src/*/*.cpp",
+                "${workspaceFolder}/src/colbin_editor/*.cpp",
                 "-o",
                 "${workspaceFolder}/Quilt",
                 // Objects
