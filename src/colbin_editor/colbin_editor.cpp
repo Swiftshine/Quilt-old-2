@@ -4,12 +4,12 @@ bool ColbinEditor::IsRunning = false;
 
 ColbinEditor::ColbinEditor()
     : mFileOpen(false)
-    , mpColbinFile(nullptr)
+    , mColbinFile(nullptr)
     , mCamera(this)
 { }
 
 ColbinEditor::~ColbinEditor() {
-    mpColbinFile.reset();
+    mColbinFile.reset();
 }
 
 
@@ -55,7 +55,7 @@ void ColbinEditor::Menu() {
                 if (ImGui::MenuItem("Close File")) {
                     mFileOpen = false;
                     mColbinFilepath = "";
-                    mpColbinFile.reset();
+                    mColbinFile.reset();
                 }
             }
 
@@ -125,7 +125,7 @@ void ColbinEditor::SaveFile(bool saveAs) {
         AppLog::Error("Colbin Editor - unable to create file.");
     }
 
-    mpColbinFile->Write(file);
+    mColbinFile->Write(file);
     file.close();
 }
 
@@ -140,14 +140,14 @@ void ColbinEditor::LoadFile() {
     if (!file.is_open()) {
         AppLog::Error("Colbin Editor - Could not open file.");
     }
-    mpColbinFile.reset();
-    mpColbinFile = std::make_unique<key::colbin::wrapper::Colbin>(file);
+    mColbinFile.reset();
+    mColbinFile = std::make_unique<key::colbin::wrapper::Colbin>(file);
     file.close();
 
     mFileOpen = true;
 
-    for (auto i = 0; i < mpColbinFile->GetEntryCount(); i++) {
-        auto entry = mpColbinFile->GetEntry(i);
+    for (auto i = 0; i < mColbinFile->GetEntryCount(); i++) {
+        auto entry = mColbinFile->GetEntry(i);
         float x = entry->GetPoint1().x;
         float y = entry->GetPoint1().y;
     }
@@ -166,9 +166,9 @@ void ColbinEditor::RenderFile() {
     ImGui::Text("Origin");
     ImGui::SetCursorPos(curPos);
 
-    for (auto i = 0; i < mpColbinFile->GetEntryCount(); i++) {
-        ImVec2 p1 = quilt::ToImVec2(mpColbinFile->GetEntry(i)->GetPoint1());
-        ImVec2 p2 = quilt::ToImVec2(mpColbinFile->GetEntry(i)->GetPoint2());
+    for (auto i = 0; i < mColbinFile->GetEntryCount(); i++) {
+        ImVec2 p1 = quilt::ToImVec2(mColbinFile->GetEntry(i)->GetPoint1());
+        ImVec2 p2 = quilt::ToImVec2(mColbinFile->GetEntry(i)->GetPoint2());
 
 
         p1 = quilt::ToWindow(mCamera, p1);
@@ -184,16 +184,16 @@ void ColbinEditor::FileProperties() {
     ImGui::Text("%s", fs::path(mColbinFilepath).filename().string().c_str());
     
     if (ImGui::CollapsingHeader("File Properties")) {
-        float unk0 = mpColbinFile->GetUnk0();
+        float unk0 = mColbinFile->GetUnk0();
         ImGui::InputFloat("unknown float at 0x0", &unk0);
-        mpColbinFile->SetUnk0(unk0);
+        mColbinFile->SetUnk0(unk0);
 
-        ImGui::Text("Lines: %d", mpColbinFile->GetEntryCount());
-        ImGui::Text("Collision types: %d", mpColbinFile->GetCollisionTypeCount());
+        ImGui::Text("Lines: %d", mColbinFile->GetEntryCount());
+        ImGui::Text("Collision types: %d", mColbinFile->GetCollisionTypeCount());
 
         if (ImGui::CollapsingHeader("Collision Types")) {
-            for (auto i = 0; i < mpColbinFile->GetCollisionTypeCount(); i++) {
-                ImGui::Selectable(mpColbinFile->GetCollisionType(i).c_str());
+            for (auto i = 0; i < mColbinFile->GetCollisionTypeCount(); i++) {
+                ImGui::Selectable(mColbinFile->GetCollisionType(i).c_str());
             }
         }
     }

@@ -38,6 +38,6 @@ private:
 private:
     std::string mColbinFilepath;
     bool mFileOpen;
-    std::unique_ptr<key::colbin::wrapper::Colbin> mpColbinFile;
+    std::unique_ptr<key::colbin::wrapper::Colbin> mColbinFile;
     Camera mCamera;
 };

@@ -18,6 +18,6 @@ public:
 
     void Update();
 public:
-    void* mpOwner;
+    void* mOwner;
     float x, y, zoom, speed;
 };

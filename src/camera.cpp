@@ -11,7 +11,7 @@ Vec2f quilt::GetAppWindowDimensions() {
 }
 
 Camera::Camera()
-    : mpOwner(nullptr)
+    : mOwner(nullptr)
     , x(0)
     , y(0)
     , zoom(1.0f)
@@ -19,7 +19,7 @@ Camera::Camera()
 { }
 
 Camera::Camera(void* newOwner)
-    : mpOwner(newOwner)
+    : mOwner(newOwner)
     , x(0)
     , y(0)
     , zoom(1.0f)
@@ -27,7 +27,7 @@ Camera::Camera(void* newOwner)
 { }
 
 Camera::~Camera() {
-    mpOwner = nullptr;
+    mOwner = nullptr;
 }
 
 void Camera::Update() {
