@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "key/colbin.h"
+#include "selectable.h"
 
 class ColbinEditor {
 public:

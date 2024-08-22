@@ -8,7 +8,9 @@ ColbinEditor::ColbinEditor()
     , mCamera(this)
 { }
 
-ColbinEditor::~ColbinEditor() { }
+ColbinEditor::~ColbinEditor() {
+    mpColbinFile.reset();
+}
 
 
 void ColbinEditor::Run() {
@@ -26,9 +28,11 @@ void ColbinEditor::Run() {
     ImGui::Text("Camera (X, Y, Zoom, Speed): %f, %f, %f, %f", mCamera.x, mCamera.y, mCamera.zoom, mCamera.speed);
 
     FileProperties();
+
     RenderFile();
 
-
+    static Selectable selectable;
+    selectable.Update();
     ImGui::End();
 }
 
@@ -141,6 +145,12 @@ void ColbinEditor::LoadFile() {
     file.close();
 
     mFileOpen = true;
+
+    for (auto i = 0; i < mpColbinFile->GetEntryCount(); i++) {
+        auto entry = mpColbinFile->GetEntry(i);
+        float x = entry->GetPoint1().x;
+        float y = entry->GetPoint1().y;
+    }
 }
 
 void ColbinEditor::RenderFile() {
