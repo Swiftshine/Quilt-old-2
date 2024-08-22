@@ -2,6 +2,11 @@
 A Kirby's Epic Yarn modding tool for various aspects of the game.
 
 
+## Planned Features
+- [ ] Level Editor
+- [ ] Collision Editor
+
+If you'd like to see a feature, make a request.
 
 ## Dependencies
 Before compiling Quilt, you will first need to download or compile the following libraries or files:
