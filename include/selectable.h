@@ -4,22 +4,23 @@ class Selectable {
 public:
     enum SelectState {
         Deselected,
-        Clicked,
-        Selected,
         Hovered,
+        Dragged,
+        Selected,
     };
 public:
-    Selectable();
+    Selectable(Camera& camera);
     ~Selectable();
 
     virtual void Draw();
     virtual void HandleDrag();
     virtual void OnClick();
+    virtual void DuringHover();
     virtual void OnDeselect();
     virtual void Update();
 
-    int GetSelectState() const { return mSelectState; }
-    void SetSelectState(int state) { mSelectState = state; }
+    SelectState GetSelectState() const { return mSelectState; }
+    void SetSelectState(SelectState state) { mSelectState = state; }
     ImVec2 GetPosition() const { return mPosition; }
     void SetPosition(ImVec2 position) { mPosition = position; }
     ImVec2 GetDimensions() const { return mDimensions; }
@@ -35,24 +36,30 @@ private:
         return ImGui::IsMouseHoveringRect(mPosition, mPosition + mDimensions);
     }
 
-    inline bool CheckClick() {
+    inline bool CheckLeftClick() {
         return ImGui::IsMouseClicked(ImGuiMouseButton_Left) && CheckHover();
     }
 
-    inline bool IsClicked()     { return SelectState::Clicked == mSelectState; }
-    inline bool IsSelected()    { return SelectState::Selected == mSelectState; }
-    inline bool IsHovered()     { return SelectState::Hovered == mSelectState; }
-    inline bool IsDeselected()  { return SelectState::Deselected == mSelectState; }
-    inline void SetClicked() { mSelectState = SelectState::Clicked; }
-    inline void SetSelected() { mSelectState = SelectState::Selected; }
-    inline void SetHovered() { mSelectState = SelectState::Hovered; }
-    inline void SetDeselected() { mSelectState = SelectState::Deselected; }
+
+    inline bool CheckMouseDown() {
+        return ImGui::IsMouseDown(ImGuiMouseButton_Left) && CheckHover();
+    }
+
+    inline bool IsStateSelected()    { return SelectState::Selected == mSelectState; }
+    inline bool IsStateHovered()     { return SelectState::Hovered == mSelectState; }
+    inline bool IsStateDeselected()  { return SelectState::Deselected == mSelectState; }
+    inline bool IsStateDragged()    { return SelectState::Dragged == mSelectState; }
+    inline void SetStateSelected() { mSelectState = SelectState::Selected; }
+    inline void SetStateHovered() { mSelectState = SelectState::Hovered; }
+    inline void SetStateDeselected() { mSelectState = SelectState::Deselected; }
+    inline void SetStateDragged() { mSelectState = SelectState::Dragged; }
 private:
+    Camera* mCamera;
     ImVec2 mPosition;
-    int    mSelectState;
     ImVec2 mDimensions;
+    ImVec2 mDragOffset;
+    SelectState mSelectState;
     u32    mColorSelect;
     u32    mColorDeselect;
     u32    mColorHover;
-    bool   mJustSelected;
 };

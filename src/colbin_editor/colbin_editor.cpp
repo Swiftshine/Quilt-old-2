@@ -31,7 +31,7 @@ void ColbinEditor::Run() {
 
     RenderFile();
 
-    static Selectable selectable;
+    static Selectable selectable(mCamera);
     selectable.Update();
     ImGui::End();
 }
