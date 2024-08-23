@@ -19,6 +19,7 @@ void Selectable::HandleDrag() {
         OnClick();
         ImVec2 mousePos = ImGui::GetMousePos();
         mDragOffset = mousePos - mPosition;
+        mDragOffset.x *= -1.0f;
         if (0.0f != mDragOffset.x || 0.0f != mDragOffset.y) {
             SetStateDragged();
         }
@@ -31,7 +32,8 @@ void Selectable::HandleDrag() {
 
     if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && IsStateDragged()) {
         ImVec2 mousePos = ImGui::GetMousePos();
-        mPosition = mousePos + mDragOffset;
+        
+        mPosition = mousePos + mDragOffset * 0.5f;
     }
 
     if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && IsStateDragged()) {
