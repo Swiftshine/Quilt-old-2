@@ -9,7 +9,7 @@ public:
         Selected,
     };
 public:
-    Selectable(Camera& camera);
+    Selectable();
     ~Selectable();
 
     virtual void Draw();
@@ -29,7 +29,7 @@ public:
     void SetColorSelect(u32 color) { mColorSelect = color; }
     u32 GetColorDeselect() const { return mColorDeselect; }
     void SetColorDeselect(u32 color) { mColorDeselect = color; }
-private:
+protected:
     // utility funcs
 
     inline bool CheckHover() {
@@ -53,8 +53,7 @@ private:
     inline void SetStateHovered() { mSelectState = SelectState::Hovered; }
     inline void SetStateDeselected() { mSelectState = SelectState::Deselected; }
     inline void SetStateDragged() { mSelectState = SelectState::Dragged; }
-private:
-    Camera* mCamera;
+protected:
     ImVec2 mPosition;
     ImVec2 mDimensions;
     ImVec2 mDragOffset;

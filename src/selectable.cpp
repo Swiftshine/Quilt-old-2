@@ -1,13 +1,12 @@
 #include "selectable.h"
 
-Selectable::Selectable(Camera& camera)
+Selectable::Selectable()
     : mSelectState(SelectState::Deselected)
     , mColorSelect(0xFF'FF'FF'FF)
     , mColorDeselect(0x77'77'77'77)
     , mColorHover(0xFF'FF'FF'FF)
     , mPosition(ImVec2(100, 100))
     , mDimensions(ImVec2(50, 50))
-    , mCamera(&camera)
 { }
 
 Selectable::~Selectable() { }
@@ -33,7 +32,7 @@ void Selectable::HandleDrag() {
     if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && IsStateDragged()) {
         ImVec2 mousePos = ImGui::GetMousePos();
         
-        mPosition = mousePos + mDragOffset * 0.5f;
+        mPosition = mousePos + mDragOffset;
     }
 
     if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && IsStateDragged()) {
