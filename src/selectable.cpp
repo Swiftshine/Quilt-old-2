@@ -15,15 +15,15 @@ void Selectable::HandleDrag() {
 
     // check if clicked
 
-    if (CheckLeftClick()) {
+    if (CheckLeftClick() && !IsStateDragged()) {
         OnClick();
         ImVec2 mousePos = ImGui::GetMousePos();
         mDragOffset = mousePos - mPosition;
-        mDragOffset.x *= -1.0f;
+        mDragOffset = mDragOffset * -1.0f;
         if (0.0f != mDragOffset.x || 0.0f != mDragOffset.y) {
             SetStateDragged();
         }
-    } else if (CheckHover()) {
+    } else if (CheckHover() && !IsStateDragged()) {
         SetStateHovered();
         DuringHover();
     } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) || IsStateHovered()) {
