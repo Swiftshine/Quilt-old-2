@@ -77,3 +77,18 @@ void Camera::Update() {
     if (zoom < 1.0f) zoom = 1.0f;
     if (speed < 0.1f) speed = 0.1f;
 }
+
+void Camera::ToCamera(ImVec2* v) {
+    v->x = (v->x - this->x) / zoom;
+    v->y = (v->y - this->y) / zoom;
+}
+
+void Camera::ToCamera(Vec2f* v) {
+    v->x = (v->x - this->x) / zoom;
+    v->y = (v->y - this->y) / zoom;
+}
+
+void Camera::FromCamera(ImVec2* v) {
+    v->x = v->x * zoom + this->x;
+    v->y = v->y * zoom + this->y;
+}

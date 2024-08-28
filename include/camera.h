@@ -17,6 +17,9 @@ public:
     ~Camera();
 
     void Update();
+    void ToCamera(ImVec2*);
+    void ToCamera(Vec2f*);
+    void FromCamera(ImVec2*);
 public:
     void* mOwner;
     float x, y, zoom, speed;

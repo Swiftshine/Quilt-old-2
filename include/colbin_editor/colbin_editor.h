@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "key/colbin.h"
-#include "selectable.h"
+#include "colbin_editor/colbin_selectable.h"
 
 class ColbinEditor {
 public:
@@ -32,7 +32,8 @@ private:
     
     /* editor */
     
-    // renders lines
+    // file rendering
+    void InitFile();
     void FileProperties();
     void RenderFile();
 private:
@@ -40,4 +41,5 @@ private:
     bool mFileOpen;
     std::unique_ptr<key::colbin::wrapper::Colbin> mColbinFile;
     Camera mCamera;
+    std::vector<ColbinEntrySelectable> mSelectables;
 };

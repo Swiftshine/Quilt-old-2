@@ -46,11 +46,11 @@ namespace key::colbin::wrapper {
         void SetUnk10(const Vec2f& p);
         void SetCollisionTypeIndex(const u32 n);
 
-        Vec2f& GetPoint1();
-        Vec2f& GetPoint2();
-        Vec2f& GetUnk10();
-        u32 GetIndex();
-        u32 GetCollisionTypeIndex();
+        Vec2f& GetPoint1() const;
+        Vec2f& GetPoint2() const;
+        Vec2f& GetUnk10() const;
+        u32 GetIndex() const;
+        u32 GetCollisionTypeIndex() const;
 
         void Read(std::ifstream& file);
         void Write(std::ofstream& file);
@@ -73,13 +73,13 @@ namespace key::colbin::wrapper {
         void Remove(u32 index);
 
 
-        f32 GetUnk0();
+        f32 GetUnk0() const;
         void SetUnk0(f32 newval);
-        Entry* GetEntry(u32 index);
-        std::string GetCollisionType(u32 index);
+        Entry* GetEntry(u32 index) const;
+        std::string GetCollisionType(u32 index) const;
         
-        u32 GetEntryCount();
-        u32 GetCollisionTypeCount();
+        u32 GetEntryCount() const;
+        u32 GetCollisionTypeCount() const;
         
         void Read(std::ifstream& file);
         void Write(std::ofstream& file);

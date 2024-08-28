@@ -10,6 +10,7 @@ ColbinEditor::ColbinEditor()
 
 ColbinEditor::~ColbinEditor() {
     mColbinFile.reset();
+    mSelectables.clear();
 }
 
 
@@ -30,9 +31,9 @@ void ColbinEditor::Run() {
     FileProperties();
 
     RenderFile();
-
-    static Selectable selectable(mCamera);
-    selectable.Update();
+    
+    static Selectable sel;
+    sel.Update();
     ImGui::End();
 }
 
@@ -151,6 +152,10 @@ void ColbinEditor::LoadFile() {
         float x = entry->GetPoint1().x;
         float y = entry->GetPoint1().y;
     }
+}
+
+void ColbinEditor::InitFile() {
+    
 }
 
 void ColbinEditor::RenderFile() {
