@@ -1,6 +1,8 @@
 # Quilt
 A Kirby's Epic Yarn modding tool for various aspects of the game.
 
+# TODO
+Use SDL2 instead of OpenGL
 
 ## Planned Features
 - [ ] Level Editor
