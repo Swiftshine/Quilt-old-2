@@ -2,7 +2,8 @@
 A Kirby's Epic Yarn modding tool for various aspects of the game.
 
 # TODO
-Use SDL2 instead of OpenGL
+- Use SDL2 instead of OpenGL
+- Finish README
 
 ## Features
 ### Planned
@@ -18,8 +19,7 @@ If you'd like to see a feature, make a request.
 ## Dependencies
 Before compiling Quilt, you will first need to download or compile the following libraries or files:
 
-- [GLFW 3.3.10](https://github.com/glfw/glfw/releases/tag/3.3.10)
-- [Glad](https://glad.dav1d.de/)
+
 - [ImGui docking branch](https://github.com/ocornut/imgui/tree/docking)
 - [Native File Dialog Extended](https://github.com/btzy/nativefiledialog-extended)
 - [C++ JSON Parser](https://github.com/nlohmann/json)
