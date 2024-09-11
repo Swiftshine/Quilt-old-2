@@ -4,3 +4,5 @@ lib/*.a
 *.exe
 *.ini
 debug_*.*
+*.dll
+*.lib

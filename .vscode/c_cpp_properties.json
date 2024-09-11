@@ -6,6 +6,7 @@
                 "${workspaceFolder}/include/",
                 "${workspaceFolder}/include/lib/",
                 "${workspaceFolder}/include/lib/imgui/",
+                "${workspaceFolder}/include/lib/SDL2/"
             ],
             "defines": [
                 "_DEBUG",

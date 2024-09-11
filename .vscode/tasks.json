@@ -15,27 +15,31 @@
                     "include/lib/",
                 "-I",
                     "include/lib/imgui/",
+                "-I",
+                    "include/lib/SDL2/",
                 
                 // Library path
                 "-L",
-                    "lib",
+                    "lib/",
                 
                 // Source files
                 "${workspaceFolder}/src/*.cpp",
-                "${workspaceFolder}/src/colbin_editor/*.cpp",
+                // "${workspaceFolder}/src/colbin_editor/*.cpp",
                 "-o",
                 "${workspaceFolder}/Quilt",
                 // Objects
                     "lib/*.o",
 
                 // Lib files
-                "-lglfw3", // libglfw3.a
+                // "-lglfw3", // libglfw3.a
                 "-lgdi32",
                 "-luser32",
                 "-lshell32",
-                "-lopengl32",
+                // "-lopengl32",
                 "-lole32",
                 "-luuid",
+                "-lSDL2main",
+                "-lSDL2"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
