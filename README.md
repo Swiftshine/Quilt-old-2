@@ -17,7 +17,7 @@ Before compiling Quilt, you will first need to download or compile the following
 
 - [C++ JSON Parser](https://github.com/nlohmann/json)
 - [ImGui docking branch](https://github.com/ocornut/imgui/tree/docking)
-- [portable-file-dialogs](https://github.com/samhocevar/portable-file-dialogs) (included in this repo)
+- [portable-file-dialogs](https://github.com/samhocevar/portable-file-dialogs)
 - [SDL 2.0](https://github.com/libsdl-org/SDL)
 
 Should you compile any source files yourself, place all objects into the `/lib/` folder. When prompted to move a header file into the project, create any folders that don't exist if necessary.
@@ -50,6 +50,12 @@ Move the following header files into `include/lib/imgui/`:
 - `imstb_textedit.h`
 - `imstb_truetype.h`
 - `imgui_impl_sdl2.h`
+
+### portable-file-dialogs
+> [!NOTE]
+> This dependency is header-only. Move `portable-file-dialogs.h` to `include/lib/`.
+
+Be sure to include any necessary libraries for the file dialogs. For example, Windows requires `ole32`, `comctl32`, `oleaut32`, and `uuid`.
 
 ### SDL2
 Download SDL2 headers. Move them to `include/lib/SDL2/`.
