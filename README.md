@@ -19,24 +19,16 @@ If you'd like to see a feature, make a request.
 ## Dependencies
 Before compiling Quilt, you will first need to download or compile the following libraries or files:
 
-
-- [ImGui docking branch](https://github.com/ocornut/imgui/tree/docking)
-- [Native File Dialog Extended](https://github.com/btzy/nativefiledialog-extended)
 - [C++ JSON Parser](https://github.com/nlohmann/json)
+- [ImGui docking branch](https://github.com/ocornut/imgui/tree/docking)
+- [portable-file-dialogs](https://github.com/samhocevar/portable-file-dialogs) (included in this repo)
+- [SDL 2.0](https://github.com/libsdl-org/SDL)
 
-Should you compile any source files yourself, place all objects into the `lib` folder. When prompted to move a header file into the project, create any folders that don't exist if necessary.
+Should you compile any source files yourself, place all objects into the `/lib/` folder. When prompted to move a header file into the project, create any folders that don't exist if necessary.
 
-### GLFW
-Download or compile the **GLFW** library and place `libglfw3.a` into the `lib` folder.
-
-Move `glfw3.h` and `glfw3native.h` into `include/lib/GLFW/`.
-### glad
-> [!TIP]
-> If you want to compile **glad** alongside Quilt instead of seperately, you can skip this.
-
-Download and compile the **glad** source code for the target configuration. In this case, it is OpenGL 3.3 Core.
-
-Move `glad.h` into `include/lib/glad/`.
+### C++ JSON Parser
+> [!NOTE]
+> This dependency is header-only. Move `json.hpp` to `include/lib/`.
 
 ### ImGui
 > [!IMPORTANT]
@@ -51,8 +43,7 @@ Compile the following files:
 - `imgui_draw.cpp`
 - `imgui_tables.cpp`
 - `imgui_widgets.cpp`
-- `backends/imgui_impl_glfw.cpp`
-- `backends/imgui_impl_opengl3.cpp`
+- `backends/imgui_impl_sdl2.cpp`
 
 Move the following header files into `include/lib/imgui/`:
 - `imconfig.h`
@@ -62,15 +53,9 @@ Move the following header files into `include/lib/imgui/`:
 - `imstb_rectpack.h`
 - `imstb_textedit.h`
 - `imstb_truetype.h`
-- `imgui_impl_opengl3.h`
-- `imgui_impl_opengl3_loader.h`
+- `imgui_impl_sdl2.h`
 
-### Native File Dialog Extended
-> [!TIP]
-> If you want to compile **Native File Dialog Extended** alongside Quilt instead of seperately, you can skip compiling it. Be sure to compile the appropriate files for your OS.
+### SDL2
+Download SDL2 headers. Move them to `include/lib/SDL2/`.
 
-Move `nfd.h` into `include/lib/`.
-
-### C++ JSON Parser
-> [!NOTE]
-> This dependency is header-only. Move `json.hpp` to `include/lib/`.
+Be sure that `SDL2.dll` (Windows) or an equivalent file is located in the same directory as the Quilt executable.
