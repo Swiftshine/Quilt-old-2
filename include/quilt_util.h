@@ -1,6 +1,7 @@
 #pragma once
 
-#include "common.h"
+#include "types.h"
+#include <fstream>
 
 namespace quilt {
     static const char zero = 0;
@@ -13,3 +14,20 @@ namespace quilt {
         }
     }
 }
+
+// macros
+
+#define ASSERT_SIZE(structure, size) \
+    static_assert(size == sizeof(structure));
+
+#define SET_FLAG(val, flag) \
+    val |= flag;
+
+#define CLEAR_FLAG(val, flag) \
+    val &= ~flag;
+
+#define PTR_INVALID(ptr) \
+    (nullptr == ptr)
+
+#define PTR_VALID(ptr) \
+    (nullptr != ptr)
