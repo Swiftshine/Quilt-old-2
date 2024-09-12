@@ -40,6 +40,7 @@ Compile the following files:
 - `imgui_tables.cpp`
 - `imgui_widgets.cpp`
 - `backends/imgui_impl_sdl2.cpp`
+- `backends/imgui_impl_sdlrenderer2.cpp`
 
 Move the following header files into `include/lib/imgui/`:
 - `imconfig.h`
@@ -50,6 +51,7 @@ Move the following header files into `include/lib/imgui/`:
 - `imstb_textedit.h`
 - `imstb_truetype.h`
 - `imgui_impl_sdl2.h`
+- `imgui_impl_sdlrenderer2.h`
 
 ### portable-file-dialogs
 > [!NOTE]
