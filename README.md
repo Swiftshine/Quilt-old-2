@@ -45,13 +45,12 @@ Compile the following files:
 Move the following header files into `include/lib/imgui/`:
 - `imconfig.h`
 - `imgui.h`
-- `imgui_impl_glfw.h`
 - `imgui_internal.h`
 - `imstb_rectpack.h`
 - `imstb_textedit.h`
 - `imstb_truetype.h`
-- `imgui_impl_sdl2.h`
-- `imgui_impl_sdlrenderer2.h`
+- `backends/imgui_impl_sdl2.h`
+- `backends/imgui_impl_sdlrenderer2.h`
 
 ### portable-file-dialogs
 > [!NOTE]
