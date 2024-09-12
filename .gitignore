@@ -6,3 +6,4 @@ lib/*.a
 debug_*.*
 *.dll
 *.lib
+.DS_Store
