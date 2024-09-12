@@ -14,6 +14,7 @@ namespace fs = std::filesystem;
 
 // dependency headers
 #include "imgui/imgui_impl_sdl2.h"
+#include "imgui/imgui_impl_sdlrenderer2.h"
 #include "SDL2/SDL.h"
 
 // Quilt utility headers

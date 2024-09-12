@@ -6,5 +6,6 @@ int main(int argc, char* argv[]) {
         return 1;
     } 
     Application::Instance()->Run();
+    AppLog::Print("Quilt has successfully terminated.");
     return 0;
 }

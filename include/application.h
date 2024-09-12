@@ -33,6 +33,20 @@ private:
      * @note Cleans up all resources. Called upon class destruction.
      */
     void Cleanup();
+
+    /**
+     * @note Processes SDL2 events.
+     * @return Boolean indicating if the application should continue running.
+     */
+    bool ProcessEvents();
+
+
+    /* GUI functions */
+
+    /**
+     * @note Draws the menu.
+     */
+    void Menu();
 private:
     SDL_Window* mMainWindow;
     SDL_Renderer* mMainRenderer;
