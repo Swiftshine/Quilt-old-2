@@ -8,3 +8,4 @@ debug_*.*
 *.lib
 .DS_Store
 quilt-settings.json
+dummy.cpp
