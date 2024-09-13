@@ -15,8 +15,6 @@ bool Settings::LoadFromDisk() {
         return false;
     }
 
-    // print cwd
-    std::cout << Quilt::SettingsPath << "\n";
     json contents;
 
     std::ifstream in(Quilt::SettingsPath);
