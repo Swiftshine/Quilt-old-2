@@ -5,7 +5,8 @@ Application::Application() {
     mMainRenderer = nullptr;
     mIsSetup = false;
     mIsRunning = false;
-    mRomFSPath = "";
+    mIsSettingsOpen = false;
+    mGameRoot = "";
     mHasValidRomFSPath = false;
 }
 
@@ -86,8 +87,14 @@ void Application::Run() {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
+        ImGui::DockSpaceOverViewport();
+        
         // menu
-        Menu();
+        MenuBar();
+
+        if (mIsSettingsOpen) {
+            SettingsMenu();
+        }
 
         ImGui::Render();
 

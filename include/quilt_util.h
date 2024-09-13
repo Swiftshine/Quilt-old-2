@@ -3,13 +3,13 @@
 #include "types.h"
 #include <fstream>
 
-namespace quilt {
+namespace Quilt {
     static const char zero = 0;
 
     static void AlignOutstream(std::ofstream& file, u32 alignment) {
         if (file.tellp() % alignment != 0) {
             for (auto i = 0; i < (file.tellp() % alignment); i++) {
-                file.write(&quilt::zero, 1);
+                file.write(&Quilt::zero, 1);
             }
         }
     }

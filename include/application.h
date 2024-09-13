@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "settings.h"
 
 #define WINDOW_WIDTH   1280
 #define WINDOW_HEIGHT  720
@@ -8,7 +9,7 @@
 class Application {
 public:
     /**
-     * @note Returns the application instance.
+     * @return The application instance.
      */
     static Application* Instance() {
         static Application inst;
@@ -30,7 +31,8 @@ private:
     ~Application();
 
     /**
-     * @note Cleans up all resources. Called upon class destruction.
+     * @note Cleans up all resources.
+     * This is called upon class destruction.
      */
     void Cleanup();
 
@@ -43,15 +45,17 @@ private:
 
     /* GUI functions */
 
-    /**
-     * @note Draws the menu.
-     */
-    void Menu();
+    /** @note Draws the menu. */
+    void MenuBar();
+
+    /** @note Draws the settings menu. */
+    void SettingsMenu();
 private:
     SDL_Window* mMainWindow;
     SDL_Renderer* mMainRenderer;
     bool mIsSetup;
     bool mIsRunning;
-    std::string mRomFSPath;
+    bool mIsSettingsOpen;
+    std::string mGameRoot;
     bool mHasValidRomFSPath;
 };

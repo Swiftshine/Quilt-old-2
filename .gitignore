@@ -7,3 +7,4 @@ debug_*.*
 *.dll
 *.lib
 .DS_Store
+quilt-settings.json
