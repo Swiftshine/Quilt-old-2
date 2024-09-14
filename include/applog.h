@@ -18,14 +18,14 @@ namespace AppLog {
     }
 
     template <typename T>
-    void Error(const T& t) {
+    inline void Error(const T& t) {
         std::cout << "Quilt Error: " << t;
         std::cout << "\n";
         throw std::runtime_error(t);
     }
 
     template <typename T, typename... Args>
-    void Error(const T& t, const Args&... args) {
+    inline void Error(const T& t, const Args&... args) {
         std::cout << "Quilt Error: " << t;
         Print(args...);
         throw std::runtime_error(t);

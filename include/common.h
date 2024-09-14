@@ -27,6 +27,38 @@ using json = nlohmann::json;
 #include "quilt_util.h"
 
 namespace Quilt {
-    static std::string QuiltRoot = fs::current_path().string();
-    static std::string SettingsPath = QuiltRoot + "/quilt-settings.json";
+    static std::string QuiltRoot = fs::current_path().string() + "/";
+    static std::string SettingsPath = QuiltRoot + "quilt_settings.json";
+
+    class File {
+    public:
+        File(std::string filename, std::vector<char> data)
+            : mFilename(filename)
+            , mData(data)
+        { }
+
+        ~File() {
+            mData.clear();
+        }
+
+        std::string& GetFilename() {
+            return mFilename;
+        }
+
+        void SetFilename(std::string filename) {
+            mFilename = filename;
+        }
+
+        std::vector<char>& GetData() {
+            return mData;
+        }
+
+        void SetData(std::vector<char> data) {
+            mData = data;
+        }
+
+    private:
+        std::string mFilename;
+        std::vector<char> mData;
+    };
 }

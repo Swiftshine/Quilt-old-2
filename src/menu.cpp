@@ -38,7 +38,17 @@ void Application::MenuBar() {
 }
 
 void Application::SettingsMenu() {
+    static bool b; // scratch boolean for many things
     ImGui::Begin("Settings", &mIsSettingsOpen);
+    
+    ImGui::SeparatorText("Quilt settings");
+    b = Settings::Instance()->GetAutoSaveSettings();
+    ImGui::Checkbox("Automatically save settings on change", &b);
+
+    if (b != Settings::Instance()->GetAutoSaveSettings()) {
+        Settings::Instance()->SetAutoSaveSettings(b);
+    }
+
 
     if (ImGui::Button("Select game root path")) {
         std::string path = pfd::select_folder("Select game root path").result();
@@ -47,9 +57,10 @@ void Application::SettingsMenu() {
             Settings::Instance()->SetGameRoot(path);
         }
     }
+
     ImGui::Text(Settings::Instance()->GetGameRoot().empty() ? "none" : Settings::Instance()->GetGameRoot().c_str());
 
-    
+    ImGui::SeparatorText("Other");
     if (ImGui::Button("Save settings")) {
         Settings::Instance()->SaveToDisk();
     }

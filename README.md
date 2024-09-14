@@ -1,14 +1,16 @@
 # Quilt
-A Kirby's Epic Yarn modding tool for various aspects of the game.
+A <em>Kirby's Epic Yarn</em> (Wii) modding tool for various aspects of the game.
 
 ## Features
 ### Planned
 - [ ] Level Editor
 - [ ] Collision Editor
+- [ ] GfArch Utility
 ### Roadmap
 - [ ] MNEB Rendering
 - [ ] BGST Rendering
 - [ ] Pre-rendered BRRES models
+- [ ] Potential <em>Kirby's Extra Epic Yarn</em> (3DS) support.
 
 If you'd like to see a feature, make a request.
 

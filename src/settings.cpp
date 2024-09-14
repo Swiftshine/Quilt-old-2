@@ -1,9 +1,12 @@
 #include "settings.h"
 
+const char* Settings_GameRoot = "game_root";
+const char* Settings_AutoSaveSettings = "save_settings_on_change";
 
 Settings::Settings() {
     mSettingsLoaded = false;
     mGameRoot = "";
+    mAutoSaveSettings = true;
 
     LoadFromDisk();
 }
@@ -21,7 +24,8 @@ bool Settings::LoadFromDisk() {
     in >> contents;
     in.close();
 
-    mGameRoot = contents["Game Root"];
+    mGameRoot = contents[Settings_GameRoot];
+    mAutoSaveSettings = contents[Settings_AutoSaveSettings];
 
     mSettingsLoaded = true;
 
@@ -31,7 +35,8 @@ bool Settings::LoadFromDisk() {
 void Settings::SaveToDisk() {
     json contents;
 
-    contents["Game Root"] = mGameRoot;
+    contents[Settings_GameRoot] = mGameRoot;
+    contents[Settings_AutoSaveSettings] = mAutoSaveSettings;
 
     std::ofstream out(Quilt::SettingsPath);
     out << contents.dump(4);

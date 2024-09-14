@@ -2,10 +2,11 @@ include/lib/
 lib/*.o
 lib/*.a
 *.exe
-*.ini
+imgui.ini
 debug_*.*
 *.dll
 *.lib
 .DS_Store
-quilt-settings.json
+quilt_settings.json
 dummy.cpp
+quilt_temp/

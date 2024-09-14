@@ -8,47 +8,28 @@
 
 class Application {
 public:
-    /**
-     * @return The application instance.
-     */
     static Application* Instance() {
         static Application inst;
         return &inst;
     }
 
-    /**
-     * @note Sets up the application.
-     * @return Boolean indicating if the application was setup successfully.
-     */
+    // returns if setup was successful
     bool Setup();
-
-    /**
-     * @note Runs the application main loop.
-     */
     void Run();
+
 private:
     Application();
     ~Application();
 
-    /**
-     * @note Cleans up all resources.
-     * This is called upon class destruction.
-     */
+    // this is called upon class destruction
     void Cleanup();
 
-    /**
-     * @note Processes SDL2 events.
-     * @return Boolean indicating if the application should continue running.
-     */
     bool ProcessEvents();
 
 
     /* GUI functions */
 
-    /** @note Draws the menu. */
     void MenuBar();
-
-    /** @note Draws the settings menu. */
     void SettingsMenu();
 private:
     SDL_Window* mMainWindow;
