@@ -1,4 +1,5 @@
 #include "application.h"
+#include "level_editor.h"
 
 void Application::MenuBar() {
     ImGui::BeginMainMenuBar();
@@ -8,19 +9,19 @@ void Application::MenuBar() {
             mIsSettingsOpen = !mIsSettingsOpen;
         }
 
-        if (ImGui::MenuItem("Colbin editor")) {
-            // will be implemented soon...
-        }
-
-
         if (ImGui::MenuItem("Level editor")) {
-            // will be implemented soon...
+            LevelEditor::Instance()->SetActive(!LevelEditor::Instance()->IsActive());
         }
 
+        // if (ImGui::MenuItem("Colbin editor")) {
+        //     // will be implemented soon...
+        // }
 
-        if (ImGui::MenuItem("GfArch utility")) {
-            // will be implemented soon...
-        }
+
+
+        // if (ImGui::MenuItem("GfArch utility")) {
+        //     // will be implemented soon...
+        // }
 
 
         // if (ImGui::MenuItem("MNEB Editor")) {

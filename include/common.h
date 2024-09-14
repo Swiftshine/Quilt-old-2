@@ -20,6 +20,7 @@ namespace fs = std::filesystem;
 #include "portable-file-dialogs.h"
 
 using json = nlohmann::json;
+using ordered_json = nlohmann::ordered_json;
 
 // Quilt utility headers
 #include "applog.h"
@@ -61,4 +62,8 @@ namespace Quilt {
         std::string mFilename;
         std::vector<char> mData;
     };
+}
+
+inline ImVec2 operator+(ImVec2 lhs, ImVec2 rhs) {
+    return ImVec2(lhs.x + rhs.x, lhs.y + rhs.y);
 }

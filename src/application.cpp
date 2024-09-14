@@ -1,4 +1,5 @@
 #include "application.h"
+#include "level_editor.h"
 
 Application::Application() {
     mMainWindow = nullptr;
@@ -76,6 +77,8 @@ void Application::Cleanup() {
 void Application::Run() {
     mIsRunning = true;
 
+    SDL_Texture* texture = nullptr;
+    
     while (mIsRunning) {
         // processing
         if (!ProcessEvents()) {
@@ -91,6 +94,7 @@ void Application::Run() {
         
         // menu
         MenuBar();
+        LevelEditor::Instance()->Run();
 
         if (mIsSettingsOpen) {
             SettingsMenu();
@@ -102,9 +106,9 @@ void Application::Run() {
         SDL_SetRenderDrawColor(mMainRenderer, 0, 0, 0, 255);
         SDL_RenderClear(mMainRenderer);
 
+
         // render ImGui data after clearing
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), mMainRenderer);
-
         SDL_RenderPresent(mMainRenderer);
     }
 }

@@ -1,0 +1,62 @@
+{
+    "World Map": 0,
+
+    "Patch Castle": 100,
+
+    "Fountain Gardens": 101,
+    "Flower Fields": 102,
+    "Rainbow Falls": 103,
+    "Big Bean Vine": 104,
+    "Mole Hole": 105,
+    "Weird Woods": 106,
+
+    "Pyramid Sands": 107,
+    "Lava Landing": 108,
+    "Cool Cave": 109,
+    "Dino Jungle": 110,
+    "Temper Temple": 111,
+    "Dusk Dunes": 112,
+
+    "Toy Tracks": 113,
+    "Mushroom Run": 114,
+    "Sweets Park": 115,
+    "Melody Town": 116,
+    "Cocoa Station": 117,
+    "Dark Manor": 118,
+
+    "Splash Beach": 119,
+    "Blub-Blub Ocean": 120,
+    "Secret Island": 121,
+    "Deep-Dive Deep": 122,
+    "Boom Boatyard": 123,
+    "Fossil Reef": 124,
+
+    "Snowy Fields": 125,
+    "Cozy Cabin": 126,
+    "Mt. Slide": 127,
+    "Frosty Wheel": 128,
+    "Frigid Fjords": 129,
+    "Evergreen Lift": 130,
+
+    "Future City": 131,
+    "Tube Town": 132,
+    "Mysterious UFO": 133,
+    "Stellar Way": 134,
+    "Moon Base": 135,
+    "Outer Rings": 136,
+
+    "Whispy's Forest": 137,
+    "Tempest Towers": 138,
+    "Cloud Palace": 139,
+    "Castle Dedede": 140,
+    "Meta Melon Isle": 141,
+    "Battleship Halberd": 142,
+
+    "Fangora": 301,
+    "Hot Wings": 302,
+    "Squashini": 303,
+    "Capamari": 304,
+    "King Dedede": 305,
+    "Meta Knight": 306,
+    "Yin-Yarn": 307
+}

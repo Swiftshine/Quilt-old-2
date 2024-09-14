@@ -16,7 +16,13 @@ public:
     // returns if setup was successful
     bool Setup();
     void Run();
+    SDL_Window* GetMainWindow() {
+        return mMainWindow;
+    }
 
+    SDL_Renderer* GetMainRenderer() {
+        return mMainRenderer;
+    }
 private:
     Application();
     ~Application();

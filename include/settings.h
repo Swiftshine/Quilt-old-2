@@ -25,13 +25,14 @@ public:
         }
     }
 
-    bool& GetAutoSaveSettings() {
+    bool GetAutoSaveSettings() {
         return mAutoSaveSettings;
     }
 
     void SetAutoSaveSettings(bool autoSaveSettings) {
         mAutoSaveSettings = autoSaveSettings;
     }
+
     bool LoadFromDisk();
     void SaveToDisk();
 
