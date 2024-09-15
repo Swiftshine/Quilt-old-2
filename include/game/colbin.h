@@ -97,9 +97,7 @@ namespace Colbin {
         }
 
         void AddCollisionType(std::string type);
-        void RemoveCollisionType(std::string query);
-
-
+        void RemoveCollisionType(std::string query);\
 
         u32 GetNumCollisionTypes() const {
             return mCollisionTypes.size();

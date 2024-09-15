@@ -431,6 +431,113 @@ namespace Mapbin {
         f32 GetUnk0() const {
             return m_0;
         }
+
+        void SetUnk0(f32 value) {
+            m_0 = value;
+        }
+
+        Vec2f GetBoundsMin() const {
+            return mBoundsMin;
+        }
+
+        void SetBoundsMin(Vec2f value) {
+            mBoundsMin = value;
+        }
+
+
+        Vec2f GetBoundsMax() const {
+            return mBoundsMax;
+        }
+
+        void SetBoundsMax(Vec2f value) {
+            mBoundsMax = value;
+        }
+
+        WallWrapper& GetWall(u32 index) {
+            return mWalls[index];
+        }
+
+        void AddWall(WallWrapper wrapper) {
+            mWalls.push_back(wrapper);
+        }
+
+        void RemoveWall(u32 index) {
+            mWalls.erase(mWalls.begin() + index);
+        }
+
+        LabeledWallWrapper& GetLabeledWall(u32 index) {
+            return mLabeledWalls[index];
+        }
+
+        void AddLabeledWall(LabeledWallWrapper wrapper) {
+            mLabeledWalls.push_back(wrapper);
+        }
+
+        void RemoveLabeledWall(u32 index) {
+            mLabeledWalls.erase(mLabeledWalls.begin() + index);
+        }
+
+        CommonGimmickWrapper& GetCommonGimmick(u32 index) {
+            return mCommonGimmicks[index];
+        }
+
+        void AddCommonGimmick(CommonGimmickWrapper wrapper) {
+            mCommonGimmicks.push_back(wrapper);
+        }
+
+        void RemoveCommonGimmick(u32 index) {
+            mCommonGimmicks.erase(mCommonGimmicks.begin() + index);
+        }
+
+        GimmickWrapper& GetGimmick(u32 index) {
+            return mGimmicks[index];
+        }
+
+        void AddGimmick(GimmickWrapper wrapper) {
+            mGimmicks.push_back(wrapper);
+        }
+
+        void RemoveGimmick(u32 index) {
+            mGimmicks.erase(mGimmicks.begin() + index);
+        }
+
+        PathWrapper& GetPath(u32 index) {
+            return mPaths[index];
+        }
+
+        void AddPath(PathWrapper wrapper) {
+            mPaths.push_back(wrapper);
+        }
+
+        void RemovePath(u32 index) {
+            mPaths.erase(mPaths.begin() + index);
+        }
+
+        ZoneWrapper& GetZone(u32 index) {
+            return mZones[index];
+        }
+
+        void AddZone(ZoneWrapper wrapper) {
+            mZones.push_back(wrapper);
+        }
+
+        void RemoveZone(u32 index) {
+            mZones.erase(mZones.begin() + index);
+        }
+
+
+        RaceCourseInfoWrapper& GetRaceCourseInfo(u32 index) {
+            return mRaceCourseInfo[index];
+        }
+
+        void AddRaceCourseInfo(RaceCourseInfoWrapper wrapper) {
+            mRaceCourseInfo.push_back(wrapper);
+        }
+
+        void RemoveRaceCourseInfo(u32 index) {
+            mRaceCourseInfo.erase(mRaceCourseInfo.begin() + index);
+        }
+
     private:
         f32 m_0;
         Vec2f mBoundsMin;
@@ -443,6 +550,7 @@ namespace Mapbin {
         std::vector<ZoneWrapper> mZones;
         std::vector<RaceCourseInfoWrapper> mRaceCourseInfo;
     };
+
 }
 }
 
