@@ -13,6 +13,30 @@ namespace Quilt {
             }
         }
     }
+
+    static bool ValidateRoot(std::string root) {
+        if (root.empty()) {
+            return false;
+        }
+
+        if (!fs::exists(root)) {
+            return false;
+        }
+
+        // there are more folders but at the moment
+        // these are the only folders that matter
+        static const std::vector<std::string> queries = {
+            "mapdata"
+        };
+
+        for (const std::string& query : queries) {
+            if (!fs::is_directory(root + "/" + query)) {
+                return false;
+            }
+        }
+
+        return true;
+    };
 }
 
 // macros

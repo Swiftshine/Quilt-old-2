@@ -3,6 +3,13 @@
 #include "common.h"
 #include "game/mapdata.h"
 
+// the same thing can be done with std::pair,
+// but this is easier to read
+struct EnbinMapbinIndices {
+    int mEnbinIndex;
+    int mMapbinIndex;
+};
+
 class LevelEditor {
 public:
     static LevelEditor* Instance() {
@@ -26,7 +33,9 @@ private:
 
     void Menu();
     void OpenByName();
+    void OpenByArchive();
     void ProcessLevelContents();
+    void ShowFiles();
 private:
     bool mIsActive;
     bool mTryOpenByName;
@@ -35,5 +44,5 @@ private:
     SDL_Texture* mTexture;
     std::string mCurrentLevelPath;
     std::vector<Quilt::File> mCurrentLevelContents;
-    
+    EnbinMapbinIndices mCurrentFileIndex;
 };
