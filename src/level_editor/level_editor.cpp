@@ -7,6 +7,8 @@ const std::string LevelResourceIDListPath = "res/quiltdata/level_resource_ids.js
 LevelEditor::LevelEditor() {
     mIsActive = false;
     mTryOpenByName = false;
+    mLevelOpen = false;
+
     ordered_json contents = ordered_json::parse(std::ifstream(LevelResourceIDListPath));
     for (auto& pair : contents.items()) {
         mLevelList.emplace_back(pair.key(), pair.value());
@@ -85,7 +87,9 @@ void LevelEditor::OpenByName() {
             mCurrentLevelContents = GfArchUtility::Extract(path);
             mCurrentLevelPath = path;
             mTryOpenByName = false;
+            mLevelOpen = true;
             ImGui::End();
+            ProcessLevelContents();
             return;
         }
     }
@@ -112,4 +116,12 @@ void LevelEditor::Render() {
     );
 
     SDL_SetRenderTarget(renderer, nullptr);
+}
+
+void LevelEditor::ProcessLevelContents() {
+    if (!mLevelOpen) {
+        return;
+    }
+
+    
 }
