@@ -26,7 +26,7 @@ namespace Mapbin {
         u32 mNumPaths;
         u32 mPathOffset;
         u32 mNumZones;
-        u32 mZoneIffset;
+        u32 mZoneOffset;
         u32 mNumCourseInfo;
         u32 mCourseInfoOffset;
         u32 mCommonGimmickNameOffset;
@@ -424,7 +424,24 @@ namespace Mapbin {
     };
 
     class FileWrapper {
+    public:
+        FileWrapper() = default;
+        ~FileWrapper() = default;
 
+        f32 GetUnk0() const {
+            return m_0;
+        }
+    private:
+        f32 m_0;
+        Vec2f mBoundsMin;
+        Vec2f mBoundsMax;
+        std::vector<WallWrapper> mWalls;
+        std::vector<LabeledWallWrapper> mLabeledWalls;
+        std::vector<CommonGimmickWrapper> mCommonGimmicks;
+        std::vector<GimmickWrapper> mGimmicks;
+        std::vector<PathWrapper> mPaths;
+        std::vector<ZoneWrapper> mZones;
+        std::vector<RaceCourseInfoWrapper> mRaceCourseInfo;
     };
 }
 }
