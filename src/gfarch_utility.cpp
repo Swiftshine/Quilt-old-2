@@ -106,7 +106,7 @@ std::vector<Quilt::File> GfArchUtility::Extract(std::string archivePath) {
 
         auto start = decompressed.begin() + entry.mDecompressedDataOffset - header.mCompressionHeaderOffset;
         data.insert(data.end(), start, start + entry.mDecompressedSize);
-        files.push_back({ filename, data });
+        files.emplace_back(filename, data);
     }
 
     return files;

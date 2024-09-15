@@ -60,20 +60,18 @@ void LevelEditor::Menu() {
 
     ImGui::EndMenuBar();
 
+    Render();
+
+
     if (!mCurrentLevelPath.empty()) {
         ImGui::Text(mCurrentLevelPath.c_str());
     }
-
-    Render();
 
     ImGui::End();
 }
 
 void LevelEditor::OpenByName() {
-    if (Settings::Instance()->GetGameRoot().empty()) {
-        AppLog::Exception("LevelEditor::OpenByName() - Game root has not been set!");
-        return;
-    }
+    AppLog::Assert(!Settings::Instance()->GetGameRoot().empty(), "Game root must not be empty!");
 
     ImGui::Begin("Level list", &mTryOpenByName);
 
@@ -83,9 +81,9 @@ void LevelEditor::OpenByName() {
             std::stringstream ss;
             ss << std::setw(3) << std::setfill('0') << pair.second;
             std::string filename = "stage" + ss.str() + ".gfa";
-            std::string path = Settings::Instance()->GetGameRoot() + "/mapdata/" + filename;
+            std::string path = Settings::Instance()->GetGameRoot() + "mapdata/" + filename;
             mCurrentLevelContents = GfArchUtility::Extract(path);
-
+            mCurrentLevelPath = path;
             mTryOpenByName = false;
             ImGui::End();
             return;

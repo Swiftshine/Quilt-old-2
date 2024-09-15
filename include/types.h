@@ -16,6 +16,14 @@ using s8  = int8_t;
 
 using Offset = u32;
 
+struct Vec2f {
+    f32 x, y;
+};
+
+struct Vec3f {
+    f32 x, y, z;
+};
+
 static f32 SwapF32(f32);
 
 static u16 Swap16(u16 value) {

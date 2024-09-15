@@ -19,33 +19,21 @@ namespace AppLog {
 
     template <typename T>
     inline void Error(const T& t) {
-        std::cout << "Quilt Error: " << t;
-        std::cout << "\n";
+        std::cerr << "Quilt error: " << t;
+        std::cerr << "\n";
         throw std::runtime_error(t);
     }
 
     template <typename T, typename... Args>
     inline void Error(const T& t, const Args&... args) {
-        std::cout << "Quilt Error: " << t;
+        std::cerr << "Quilt error: " << t;
         Print(args...);
         throw std::runtime_error(t);
     }
 
-    template <typename T>
-    void Exception(const T& t) {
-        std::cout << "Quilt Exception: " << t;
-        std::cout << "\n";
-    }
-
-    template <typename T, typename... Args>
-    void Exception(const T& t, const Args&... args) {
-        std::cout << "Quilt Exception: " << t;
-        Print(args...);
-    }
-
     static void Assert(bool condition, std::string msg) {
         if (!condition) {
-            std::cout << "Quilt Assertion Failed: " << msg << "\n";
+            std::cerr << "Quilt assertion failed: " << msg << "\n";
             std::abort();
         }
     }
