@@ -1,5 +1,6 @@
 #include "level_editor.h"
 #include "application.h"
+#include "gfarch_utility.h"
 
 const std::string LevelResourceIDListPath = "res/quiltdata/level_resource_ids.json";
 
@@ -59,16 +60,36 @@ void LevelEditor::Menu() {
 
     ImGui::EndMenuBar();
 
+    if (!mCurrentLevelPath.empty()) {
+        ImGui::Text(mCurrentLevelPath.c_str());
+    }
+
     Render();
 
     ImGui::End();
 }
 
 void LevelEditor::OpenByName() {
+    if (Settings::Instance()->GetGameRoot().empty()) {
+        AppLog::Exception("LevelEditor::OpenByName() - Game root has not been set!");
+        return;
+    }
+
     ImGui::Begin("Level list", &mTryOpenByName);
 
     for (auto& pair : mLevelList) {
-        ImGui::Selectable(pair.first.c_str());
+        if (ImGui::Selectable(pair.first.c_str())) {
+
+            std::stringstream ss;
+            ss << std::setw(3) << std::setfill('0') << pair.second;
+            std::string filename = "stage" + ss.str() + ".gfa";
+            std::string path = Settings::Instance()->GetGameRoot() + "/mapdata/" + filename;
+            mCurrentLevelContents = GfArchUtility::Extract(path);
+
+            mTryOpenByName = false;
+            ImGui::End();
+            return;
+        }
     }
     ImGui::End();
 }

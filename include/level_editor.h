@@ -30,4 +30,6 @@ private:
     bool mTryOpenByName;
     std::vector<std::pair<std::string, int>> mLevelList;
     SDL_Texture* mTexture;
+    std::string mCurrentLevelPath;
+    std::vector<Quilt::File> mCurrentLevelContents;
 };

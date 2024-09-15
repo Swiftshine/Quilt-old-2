@@ -23,6 +23,10 @@ inline u32 align16(u32 value) {
     return ((value + 0xF) & ~(0xF));
 }
 
+inline u32 align32(u32 value) {
+    return ((value + 0x1F) & ~(0x1F));
+}
+
 std::vector<Quilt::File> GfArchUtility::Extract(std::string archivePath) {
     std::ifstream in(archivePath, std::ios::binary);
     if (!fs::is_regular_file(archivePath)) {
@@ -65,7 +69,7 @@ std::vector<Quilt::File> GfArchUtility::Extract(std::string archivePath) {
 
     std::vector<char> compressed;
     std::vector<char> decompressed;
-    compressed.insert(compressed.end(), archive.begin() + header.mCompressionHeaderOffset, archive.end());
+    compressed.insert(compressed.end(), archive.begin() + currentOffset, archive.end());
     {
         if (!fs::exists("quilt_temp")) {
             fs::create_directory("quilt_temp");
@@ -92,8 +96,6 @@ std::vector<Quilt::File> GfArchUtility::Extract(std::string archivePath) {
         }
     }
 
-    currentOffset = 0;
-
     std::vector<Quilt::File> files;
 
     for (auto i = 0; i < entries.size(); i++) {
@@ -101,19 +103,10 @@ std::vector<Quilt::File> GfArchUtility::Extract(std::string archivePath) {
         std::string filename = filenames[i];
 
         std::vector<char> data;
-        data.insert(data.end(), decompressed.begin() + currentOffset, decompressed.begin() + currentOffset + entry.mDecompressedSize);
+
+        auto start = decompressed.begin() + entry.mDecompressedDataOffset - header.mCompressionHeaderOffset;
+        data.insert(data.end(), start, start + entry.mDecompressedSize);
         files.push_back({ filename, data });
-        currentOffset += entry.mDecompressedSize;
-        currentOffset = align16(currentOffset);
-
-
-        if (1 == cHeader.mCompressionType) {
-            char c = 0;
-            while (0 == c) {
-                c = decompressed[currentOffset++];
-            }
-            currentOffset--;
-        }
     }
 
     return files;

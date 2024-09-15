@@ -5,11 +5,12 @@
 #include <cstring>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
 #include <string>
 #include <vector>
-
 namespace fs = std::filesystem;
 
 // dependency headers
@@ -33,6 +34,8 @@ namespace Quilt {
 
     class File {
     public:
+        File() = default;
+        
         File(std::string filename, std::vector<char> data)
             : mFilename(filename)
             , mData(data)

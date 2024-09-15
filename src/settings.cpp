@@ -25,6 +25,10 @@ bool Settings::LoadFromDisk() {
     in.close();
 
     mGameRoot = contents[Settings_GameRoot];
+    if (mGameRoot[mGameRoot.length() - 1] != '/') {
+        mGameRoot += "/";
+    }
+    
     mAutoSaveSettings = contents[Settings_AutoSaveSettings];
 
     mSettingsLoaded = true;
