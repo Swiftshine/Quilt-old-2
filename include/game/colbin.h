@@ -26,8 +26,8 @@ namespace Colbin {
 
     class EntryWrapper {
     public:
-        EntryWrapper();
-        ~EntryWrapper();
+        EntryWrapper() = default;
+        ~EntryWrapper() = default;
     
         void SetStart(Vec2f start) {
             mStart = start;
@@ -42,16 +42,16 @@ namespace Colbin {
             mCollisionType = type;
         }
 
-        Vec2f& GetStart() {
+        Vec2f GetStart() const {
             return mStart;
         }
-        Vec2f& GetEnd() {
+        Vec2f GetEnd() const {
             return mEnd;
         }
-        Vec2f& GetUnk10() {
+        Vec2f GetUnk10() const {
             return m_10;
         }
-        std::string& GetCollisionType() {
+        std::string GetCollisionType() const {
             return mCollisionType;
         }
     private:
@@ -63,8 +63,8 @@ namespace Colbin {
 
     class FileWrapper {
     public:
-        FileWrapper();
-        ~FileWrapper();
+        FileWrapper() = default;
+        ~FileWrapper() = default;
 
         f32 GetUnk0() const {
             return m_0;
@@ -121,6 +121,8 @@ namespace Colbin {
 
             u32 numColl = Swap32(*(u32*)&data[footerOffs]);
 
+            std::vector<std::pair<u32, u32>> indices;
+
             for (auto i = 0; i < numEntries; i++) {
                 Entry entry;
                 std::memcpy(&entry, &data[offs], sizeof(Entry));
@@ -142,6 +144,8 @@ namespace Colbin {
                 v.x = SwapF32(v.x);
                 v.y = SwapF32(v.y);
                 wrapper.SetUnk10(v);
+
+                indices.emplace_back(Swap32(entry.mEntryIndex), Swap32(entry.mCollisionTypeIndex));
             }
 
             offs = footerOffs;
@@ -149,8 +153,12 @@ namespace Colbin {
             for (auto i = 0; i < numColl; i++) {
                 char type[0x20] { 0 };
                 std::memcpy(type, &data[offs], 0x20);
-                mCollisionTypes.push_back(type);
+                mCollisionTypes.emplace_back(type);
                 offs += 0x20;
+            }
+
+            for (auto pair : indices) {
+                mEntries[pair.first].SetCollisionType(mCollisionTypes[pair.second]);
             }
         }
 

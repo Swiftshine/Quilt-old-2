@@ -1,6 +1,7 @@
 #pragma once
 
 // C/C++ standard library
+#include <array>
 #include <cstdint>
 #include <cstring>
 #include <filesystem>
