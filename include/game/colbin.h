@@ -32,9 +32,19 @@ namespace Colbin {
         void SetStart(Vec2f start) {
             mStart = start;
         }
+
+        void SetStart(f32 startX, f32 startY) {
+            mStart = Vec2f(startX, startY);
+        }
+
         void SetEnd(Vec2f end) {
             mEnd = end;
         }
+
+        void SetEnd(f32 endX, f32 endY) {
+            mEnd = Vec2f(endX, endY);
+        }
+        
         void SetUnk10(Vec2f unk) {
             m_10 = unk;
         }

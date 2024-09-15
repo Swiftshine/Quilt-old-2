@@ -465,6 +465,10 @@ namespace Mapbin {
             mWalls.erase(mWalls.begin() + index);
         }
 
+        u32 GetNumWalls() {
+            return mWalls.size();
+        }
+
         LabeledWallWrapper& GetLabeledWall(u32 index) {
             return mLabeledWalls[index];
         }
@@ -538,6 +542,52 @@ namespace Mapbin {
             mRaceCourseInfo.erase(mRaceCourseInfo.begin() + index);
         }
 
+        void Read(const std::vector<char>& data) {
+            ClearAll();
+            
+            u32 offs = 0;
+            m_0 = SwapF32(*(f32*)&data[offs]);
+            offs += sizeof(f32);
+
+            mBoundsMin.x = SwapF32(*(f32*)&data[offs]);
+            offs += sizeof(f32);
+            mBoundsMin.y = SwapF32(*(f32*)&data[offs]);
+            offs += sizeof(f32);
+            mBoundsMax.x = SwapF32(*(f32*)&data[offs]);
+            offs += sizeof(f32);
+            mBoundsMax.y = SwapF32(*(f32*)&data[offs]);
+            offs += sizeof(f32);
+
+            u32 numWalls = Swap32(*(u32*)&data[offs]);
+            offs += sizeof(u32);
+
+            u32 wallOffs = Swap32(*(u32*)&data[offs]);
+            offs += sizeof(u32);
+
+            for (auto i = 0; i < numWalls; i++) {
+                WallWrapper wrapper;
+                Wall wall;
+                std::memcpy(&wall, &data[wallOffs], sizeof(Wall));
+                wallOffs += sizeof(Wall);
+                wrapper.SetStart(SwapF32(wall.mStart.x), SwapF32(wall.mStart.y));
+                wrapper.SetEnd(SwapF32(wall.mEnd.x), SwapF32(wall.mEnd.y));
+                mWalls.push_back(wrapper);
+            }
+
+            // todo: the rest later
+        }
+        
+        void Save() const;
+
+        void ClearAll() {
+            mWalls.clear();
+            mLabeledWalls.clear();
+            mCommonGimmicks.clear();
+            mGimmicks.clear();
+            mPaths.clear();
+            mZones.clear();
+            mRaceCourseInfo.clear();
+        }
     private:
         f32 m_0;
         Vec2f mBoundsMin;

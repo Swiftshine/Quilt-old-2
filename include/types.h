@@ -17,6 +17,16 @@ using s8  = int8_t;
 using Offset = u32;
 
 struct Vec2f {
+    Vec2f() = default;
+    Vec2f(float nx, float ny)
+        : x(nx)
+        , y(ny)
+    { }
+
+    Vec2f operator+(Vec2f& other) {
+        return Vec2f(x + other.x, y + other.y);
+    }
+    
     f32 x, y;
 };
 

@@ -8,8 +8,7 @@ LevelEditor::LevelEditor() {
     mIsActive = false;
     mTryOpenByName = false;
     mLevelOpen = false;
-    mCurrentFileIndex.mEnbinIndex = -1;
-    mCurrentFileIndex.mMapbinIndex = -1;
+    InvalidateFileIndices();
 
     ordered_json contents = ordered_json::parse(std::ifstream(LevelResourceIDListPath));
     for (auto& pair : contents.items()) {
@@ -40,7 +39,9 @@ void LevelEditor::Run() {
     }
     
     ShowFiles();
-
+    mWindowPosition = {ImGui::GetWindowPos().x, ImGui::GetWindowPos().y};
+    mWindowSize = {ImGui::GetWindowSize().x, ImGui::GetWindowSize().y};
+    mWindowActive = ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows);
 }
 
 void LevelEditor::Menu() {
@@ -65,8 +66,7 @@ void LevelEditor::Menu() {
             mLevelOpen = false;
             mCurrentLevelPath = "";
             mCurrentLevelContents.clear();
-            mCurrentFileIndex.mEnbinIndex = -1;
-            mCurrentFileIndex.mMapbinIndex = -1;
+            InvalidateFileIndices();
         }
         ImGui::EndMenu();
     }
@@ -76,10 +76,15 @@ void LevelEditor::Menu() {
     Render();
 
 
-    if (!mCurrentLevelPath.empty() && -1 != mCurrentFileIndex.mEnbinIndex && -1 != mCurrentFileIndex.mMapbinIndex) {
+    if (!mCurrentLevelPath.empty() && FileIndicesValid()) {
+        ImGui::SeparatorText("Level information");
         ImGui::Text(mCurrentLevelPath.c_str());
         std::string text = "Editing files " + mCurrentLevelContents[mCurrentFileIndex.mEnbinIndex].GetFilename() + " and " + mCurrentLevelContents[mCurrentFileIndex.mMapbinIndex].GetFilename();
         ImGui::Text(text.c_str());
+
+        ImGui::SeparatorText("Camera information");
+        ImGui::Text(std::string("Zoom: " + std::to_string(mCamera.mZoom)).c_str());
+        ImGui::Text(std::string("Position: " + std::to_string(mCamera.mPosition.x) + ", " + std::to_string(mCamera.mPosition.y)).c_str());
     }
 
     ImGui::End();
@@ -114,7 +119,7 @@ void LevelEditor::OpenByName() {
             mCurrentLevelPath = path;
             mTryOpenByName = false;
             mLevelOpen = true;
-            ProcessLevelContents();
+            InvalidateFileIndices();
             break;
         }
     }
@@ -129,7 +134,8 @@ void LevelEditor::OpenByArchive() {
     std::vector<std::string> pathVector = pfd::open_file(
         "Select level archive",
         ".",
-        filters).result();
+        filters
+    ).result();
     
     if (pathVector.empty()) {
         return;
@@ -139,11 +145,10 @@ void LevelEditor::OpenByArchive() {
     mCurrentLevelPath = path;
     mCurrentLevelContents = GfArchUtility::Extract(path);
     mLevelOpen = true;
-    ProcessLevelContents();
 }
 
 void LevelEditor::Render() {
-    if (!mLevelOpen && -1 != mCurrentFileIndex.mEnbinIndex && -1 != mCurrentFileIndex.mMapbinIndex) {
+    if (!mLevelOpen && FileIndicesValid()) {
         return;
     }
 
@@ -151,16 +156,34 @@ void LevelEditor::Render() {
     SDL_SetRenderTarget(renderer, mTexture);
     
     // start drawing
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
-    SDL_Point start = {600, 600};
-    SDL_Point end = {700, 800};
+    for (auto i = 0; i < mCurrentMapbin.GetNumWalls(); i++) {
+        auto& wall = mCurrentMapbin.GetWall(i);
+        SDL_FPoint start = {wall.GetStart(). x,wall.GetStart().y};
+        SDL_FPoint end = {wall.GetEnd().x, wall.GetEnd().y};
 
-    SDL_RenderDrawLine(renderer, start.x, start.y, end.x, end.y);
+        start.x *= mCamera.mZoom;
+        end.x *= mCamera.mZoom;
+        start.y *= mCamera.mZoom;
+        end.y *= mCamera.mZoom;
+
+        start.x = start.x + mCamera.mPosition.x;
+        end.x = end.x + mCamera.mPosition.x;
+        start.y = ImGui::GetWindowHeight() - start.y + mCamera.mPosition.y;
+        end.y = ImGui::GetWindowHeight() - end.y + mCamera.mPosition.y;
+
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
+    }
 
     // end drawing
+
     ImGui::GetWindowDrawList()->AddImage(
-        (void*)mTexture,
+        static_cast<void*>(mTexture),
         ImGui::GetWindowPos(),
         ImGui::GetWindowPos() + ImGui::GetWindowSize(),
         {0.0f, 0.0f}, {1.0f, 1.0f}
@@ -170,11 +193,12 @@ void LevelEditor::Render() {
 }
 
 void LevelEditor::ProcessLevelContents() {
-    if (!mLevelOpen) {
+    if (!mLevelOpen && FileIndicesValid()) {
         return;
     }
 
-    
+    std::vector<char> data = mCurrentLevelContents[mCurrentFileIndex.mMapbinIndex].GetData();
+    mCurrentMapbin.Read(data);
 }
 
 void LevelEditor::ShowFiles() {
@@ -193,11 +217,44 @@ void LevelEditor::ShowFiles() {
         Quilt::File& f = mCurrentLevelContents[i];
         std::string name = fs::path(f.GetFilename()).stem().string();
         if (ImGui::Selectable(name.c_str(), i == mCurrentFileIndex.mEnbinIndex)) {
-            mCurrentFileIndex.mEnbinIndex = i;
-            mCurrentFileIndex.mMapbinIndex = i + 1;
+            SetFileIndices(i, i + 1);
+            ProcessLevelContents();
             break;
         }
     }
 
     ImGui::End();
+}
+
+void LevelEditor::UpdateCamera(SDL_Event& event) {
+    if (!mLevelOpen) {
+        return;
+    }
+
+    switch (event.key.keysym.sym) {
+        case SDLK_a:
+            mCamera.mPosition.x += mCamera.mSpeed;
+            break;
+        case SDLK_d:
+            mCamera.mPosition.x -= mCamera.mSpeed;
+            break;
+        case SDLK_w:
+            mCamera.mPosition.y += mCamera.mSpeed;
+            break;
+        case SDLK_s:
+            mCamera.mPosition.y -= mCamera.mSpeed;
+            break;
+    }
+
+    if (SDL_MOUSEWHEEL == event.type) {
+        if (event.wheel.y > 0) {
+            mCamera.mZoom += 0.1f;
+        } else if (event.wheel.y < 0) {
+            mCamera.mZoom -= 0.1f;
+        }
+    }
+
+    if (1.0 > mCamera.mZoom) {
+        mCamera.mZoom = 1.0f;
+    }
 }

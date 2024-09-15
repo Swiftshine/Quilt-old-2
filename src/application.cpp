@@ -120,6 +120,8 @@ bool Application::ProcessEvents() {
         if (SDL_QUIT == event.type) {
             mIsRunning = false;
             return false;
+        } else if (SDL_KEYDOWN == event.type || SDL_MOUSEWHEEL == event.type) {
+            LevelEditor::Instance()->UpdateCamera(event);
         }
 
         ImGui_ImplSDL2_ProcessEvent(&event);
