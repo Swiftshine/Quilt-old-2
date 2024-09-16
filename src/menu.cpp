@@ -61,6 +61,12 @@ void Application::SettingsMenu() {
 
     ImGui::Text(Settings::Instance()->GetGameRoot().empty() ? "none" : Settings::Instance()->GetGameRoot().c_str());
 
+    ImGui::SeparatorText("Level editor settings");
+
+    b = Settings::Instance()->GetLEDisplayLevelPath();
+    ImGui::Checkbox("Display level path", &b);
+    Settings::Instance()->SetLEDisplayLevelPath(b);
+
     ImGui::SeparatorText("Other");
     if (ImGui::Button("Save settings")) {
         Settings::Instance()->SaveToDisk();

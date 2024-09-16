@@ -32,6 +32,8 @@ void LevelEditor::Run() {
         return;
     }
 
+    ImGui::Begin("Level editor viewport", &mIsActive, ImGuiWindowFlags_MenuBar);
+
     Menu();
 
     if (mTryOpenByName) {
@@ -41,12 +43,29 @@ void LevelEditor::Run() {
     ShowFiles();
     mWindowPosition = {ImGui::GetWindowPos().x, ImGui::GetWindowPos().y};
     mWindowSize = {ImGui::GetWindowSize().x, ImGui::GetWindowSize().y};
-    mWindowActive = ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows);
+    mWindowHovered = ImGui::IsWindowHovered();
+    mWindowFocused = ImGui::IsWindowFocused();
+
+    Render();
+
+
+    if (!mCurrentLevelPath.empty() && FileIndicesValid()) {
+        ImGui::SeparatorText("Level information");
+        if (Settings::Instance()->GetLEDisplayLevelPath()) {
+            ImGui::Text(mCurrentLevelPath.c_str());
+        }
+        std::string text = "Editing files " + mCurrentLevelContents[mCurrentFileIndex.mEnbinIndex].GetFilename() + " and " + mCurrentLevelContents[mCurrentFileIndex.mMapbinIndex].GetFilename();
+        ImGui::Text(text.c_str());
+
+        ImGui::SeparatorText("Camera information");
+        ImGui::Text(std::string("Zoom: " + std::to_string(mCamera.mZoom)).c_str());
+        ImGui::Text(std::string("Position: " + std::to_string(mCamera.mPosition.x) + ", " + std::to_string(mCamera.mPosition.y)).c_str());
+    }
+
+    ImGui::End();
 }
 
 void LevelEditor::Menu() {
-    ImGui::Begin("Level editor viewport", &mIsActive, ImGuiWindowFlags_MenuBar);
-    
     ImGui::BeginMenuBar();
 
     if (ImGui::BeginMenu("Menu")) {
@@ -72,22 +91,6 @@ void LevelEditor::Menu() {
     }
 
     ImGui::EndMenuBar();
-
-    Render();
-
-
-    if (!mCurrentLevelPath.empty() && FileIndicesValid()) {
-        ImGui::SeparatorText("Level information");
-        ImGui::Text(mCurrentLevelPath.c_str());
-        std::string text = "Editing files " + mCurrentLevelContents[mCurrentFileIndex.mEnbinIndex].GetFilename() + " and " + mCurrentLevelContents[mCurrentFileIndex.mMapbinIndex].GetFilename();
-        ImGui::Text(text.c_str());
-
-        ImGui::SeparatorText("Camera information");
-        ImGui::Text(std::string("Zoom: " + std::to_string(mCamera.mZoom)).c_str());
-        ImGui::Text(std::string("Position: " + std::to_string(mCamera.mPosition.x) + ", " + std::to_string(mCamera.mPosition.y)).c_str());
-    }
-
-    ImGui::End();
 }
 
 void LevelEditor::OpenByName() {
@@ -244,6 +247,10 @@ void LevelEditor::UpdateCamera(SDL_Event& event) {
         case SDLK_s:
             mCamera.mPosition.y -= mCamera.mSpeed;
             break;
+    }
+
+    if (!(mWindowFocused && mWindowHovered)) {
+        return;
     }
 
     if (SDL_MOUSEWHEEL == event.type) {

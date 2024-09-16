@@ -73,5 +73,6 @@ private:
     Camera mCamera;
     Vec2f mWindowPosition;
     Vec2f mWindowSize;
-    bool mWindowActive;
+    bool mWindowFocused;
+    bool mWindowHovered;
 };

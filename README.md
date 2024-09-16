@@ -2,6 +2,8 @@
 A <em>Kirby's Epic Yarn</em> (Wii) modding tool for various aspects of the game.
 
 ## Features
+### Current Capabilities
+- [X] Level Viewing
 ### Planned
 - [ ] Level Editor
 - [ ] Collision Editor

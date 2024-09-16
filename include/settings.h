@@ -33,6 +33,19 @@ public:
         mAutoSaveSettings = autoSaveSettings;
     }
 
+    bool GetLEDisplayLevelPath() {
+        return mLEDisplayLevelPath;
+    }
+
+    void SetLEDisplayLevelPath(bool displayLevelPath) {
+        mLEDisplayLevelPath = displayLevelPath;
+
+        if (mAutoSaveSettings) {
+            SaveToDisk();
+        }
+    }
+
+
     bool LoadFromDisk();
     void SaveToDisk();
 
@@ -47,6 +60,11 @@ private:
 private:
     bool mSettingsLoaded;
 
-    std::string mGameRoot;
+    // Quilt settings
+
     bool mAutoSaveSettings;
+    std::string mGameRoot;
+    
+    // Level editor settings
+    bool mLEDisplayLevelPath;
 };
