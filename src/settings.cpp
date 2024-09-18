@@ -29,6 +29,7 @@ bool Settings::LoadFromDisk() {
     mAutoSaveSettings = contents[Settings_AutoSaveSettings];
     
     mGameRoot = contents[Settings_GameRoot];
+    
     if (mGameRoot[mGameRoot.length() - 1] != '/') {
         mGameRoot += "/";
     }
@@ -42,6 +43,10 @@ bool Settings::LoadFromDisk() {
 
 void Settings::SaveToDisk() {
     ordered_json contents;
+
+    if (mGameRoot[mGameRoot.length() - 1] != '/') {
+        mGameRoot += "/";
+    }
 
     contents[Settings_AutoSaveSettings] = mAutoSaveSettings;
     contents[Settings_GameRoot] = mGameRoot;

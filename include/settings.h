@@ -19,7 +19,10 @@ public:
         }
 
         mGameRoot = gameRoot;
-        
+        if (mGameRoot[mGameRoot.length() - 1] != '/') {
+            mGameRoot += "/";
+        }
+
         if (mAutoSaveSettings) {
             SaveToDisk();
         }
