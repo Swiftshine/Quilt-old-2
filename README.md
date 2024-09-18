@@ -16,6 +16,9 @@ A <em>Kirby's Epic Yarn</em> (Wii) modding tool for various aspects of the game.
 
 If you'd like to see a feature, make a request.
 
+## Screenshots
+![level editor preview](repo_assets/img/img1.png "a preview of the WIP level editor")
+
 ## Dependencies
 Before compiling Quilt, you will first need to download or compile the following libraries or files:
 
