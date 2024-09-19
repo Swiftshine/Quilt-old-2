@@ -31,7 +31,7 @@ namespace Mapbin {
         u32 mCourseInfoOffset;
         u32 mCommonGimmickNameOffset;
         u32 mColbinTypeOffset;
-        u32 mLabeledWallLabels;
+        u32 mLabeledWallLabelOffset;
     };
 
     using Wall = Colbin::Entry;
@@ -267,12 +267,16 @@ namespace Mapbin {
         CommonGimmickWrapper() = default;
         ~CommonGimmickWrapper() = default;
 
-        std::string GetName() const {
-            return mName;
+        std::array<char, 0x20> GetBytes() const {
+            return mBytes;
         }
 
-        void SetName(const std::string& value) {
-            mName = value;
+        void SetBytes(const std::array<char, 0x20> bytes) {
+            mBytes = bytes;
+        }
+
+        void SetBytes(const char bytes[0x20]) {
+            std::memcpy(mBytes.data(), bytes, 0x20);
         }
 
         Vec3f GetPosition() const {
@@ -288,7 +292,7 @@ namespace Mapbin {
         }
 
     private:
-        std::string mName;
+        std::array<char, 0x20> mBytes; // the name of the common gimmick; it's usually in ShiftJIS
         Vec3f mPosition;
         CommonGimmickParamsWrapper mParams;
     };
@@ -552,30 +556,70 @@ namespace Mapbin {
 
         void Read(const std::vector<char>& data) {
             ClearAll();
-            
+
             u32 offs = 0;
+            
+            u32 numWalls;
+            u32 wallOffs;
+            u32 numLabeledWalls;
+            u32 labeledWallOffs;
+            u32 numCommonGimmicks;
+            u32 commonGimmickOffset;
+            u32 numGimmicks;
+            u32 gimmickOffset;
+            u32 numPaths;
+            u32 pathOffset;
+            u32 numZones;
+            u32 zoneOffset;
+            u32 numCourseInfo;
+            u32 courseInfoOffset;
+            u32 commonGimmickNameOffset;
+            u32 colbinTypeOffset;
+            u32 labeledWallLabelOffset;
 
             Quilt::ByteSwapFromVector(data, offs, m_0);
             Quilt::ByteSwapFromVector(data, offs, mBoundsMin.x);
             Quilt::ByteSwapFromVector(data, offs, mBoundsMin.y);
             Quilt::ByteSwapFromVector(data, offs, mBoundsMax.x);
             Quilt::ByteSwapFromVector(data, offs, mBoundsMax.y);
-            u32 numWalls;
             Quilt::ByteSwapFromVector(data, offs, numWalls);
-            u32 wallOffs;
             Quilt::ByteSwapFromVector(data, offs, wallOffs);
+            Quilt::ByteSwapFromVector(data, offs, numLabeledWalls);
+            Quilt::ByteSwapFromVector(data, offs, labeledWallOffs);
+            Quilt::ByteSwapFromVector(data, offs, numCommonGimmicks);
+            Quilt::ByteSwapFromVector(data, offs, commonGimmickOffset);
+            Quilt::ByteSwapFromVector(data, offs, numGimmicks);
+            Quilt::ByteSwapFromVector(data, offs, gimmickOffset);
+            Quilt::ByteSwapFromVector(data, offs, numPaths);
+            Quilt::ByteSwapFromVector(data, offs, pathOffset);
+            Quilt::ByteSwapFromVector(data, offs, numZones);
+            Quilt::ByteSwapFromVector(data, offs, zoneOffset);
+            Quilt::ByteSwapFromVector(data, offs, numCourseInfo);
+            Quilt::ByteSwapFromVector(data, offs, courseInfoOffset);
+            Quilt::ByteSwapFromVector(data, offs, commonGimmickNameOffset);
+            Quilt::ByteSwapFromVector(data, offs, colbinTypeOffset);
+            Quilt::ByteSwapFromVector(data, offs, labeledWallLabelOffset);
 
+            // at this point, "offs" can be used for whatever
 
             for (auto i = 0; i < numWalls; i++) {
                 WallWrapper wrapper;
                 Wall wall;
+
                 Quilt::GetFromVector(data, wallOffs, wall);
                 wrapper.SetStart(SwapF32(wall.mStart.x), SwapF32(wall.mStart.y));
                 wrapper.SetEnd(SwapF32(wall.mEnd.x), SwapF32(wall.mEnd.y));
                 wrapper.SetUnk10({SwapF32(wall.m_10.x), SwapF32(wall.m_10.y)});
+
+                string32 name { 0 };
+                
+                offs = colbinTypeOffset + 4 + (0x20 * i);
+                Quilt::GetFromVector(data, offs, name, false);
+                wrapper.SetCollisionType(name);
+
                 mWalls.push_back(wrapper);
             }
-            
+
             // todo: the rest later
         }
         
