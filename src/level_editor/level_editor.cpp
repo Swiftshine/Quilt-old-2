@@ -150,51 +150,6 @@ void LevelEditor::OpenByArchive() {
     mLevelOpen = true;
 }
 
-void LevelEditor::Render() {
-    if (!mLevelOpen && FileIndicesValid()) {
-        return;
-    }
-
-    SDL_Renderer* renderer = Application::Instance()->GetMainRenderer();
-    SDL_SetRenderTarget(renderer, mTexture);
-    
-    // start drawing
-    
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-
-    for (auto i = 0; i < mCurrentMapbin.GetNumWalls(); i++) {
-        auto& wall = mCurrentMapbin.GetWall(i);
-        SDL_FPoint start = {wall.GetStart(). x,wall.GetStart().y};
-        SDL_FPoint end = {wall.GetEnd().x, wall.GetEnd().y};
-
-        start.x *= mCamera.mZoom;
-        end.x *= mCamera.mZoom;
-        start.y *= mCamera.mZoom;
-        end.y *= mCamera.mZoom;
-
-        start.x = start.x + mCamera.mPosition.x;
-        end.x = end.x + mCamera.mPosition.x;
-        start.y = ImGui::GetWindowHeight() - start.y + mCamera.mPosition.y;
-        end.y = ImGui::GetWindowHeight() - end.y + mCamera.mPosition.y;
-
-
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
-    }
-
-    // end drawing
-
-    ImGui::GetWindowDrawList()->AddImage(
-        static_cast<void*>(mTexture),
-        ImGui::GetWindowPos(),
-        ImGui::GetWindowPos() + ImGui::GetWindowSize(),
-        {0.0f, 0.0f}, {1.0f, 1.0f}
-    );
-
-    SDL_SetRenderTarget(renderer, nullptr);
-}
-
 void LevelEditor::ProcessLevelContents() {
     if (!mLevelOpen && FileIndicesValid()) {
         return;
@@ -220,6 +175,9 @@ void LevelEditor::ShowFiles() {
         Quilt::File& f = mCurrentLevelContents[i];
         std::string name = fs::path(f.GetFilename()).stem().string();
         if (ImGui::Selectable(name.c_str(), i == mCurrentFileIndex.mEnbinIndex)) {
+            if (i == mCurrentFileIndex.mEnbinIndex) {
+                continue;
+            }
             SetFileIndices(i, i + 1);
             ProcessLevelContents();
             break;
@@ -234,19 +192,36 @@ void LevelEditor::UpdateCamera(SDL_Event& event) {
         return;
     }
 
+    bool keyPressed = false;
+
     switch (event.key.keysym.sym) {
         case SDLK_a:
+            keyPressed = true;
             mCamera.mPosition.x += mCamera.mSpeed;
             break;
         case SDLK_d:
+            keyPressed = true;
             mCamera.mPosition.x -= mCamera.mSpeed;
             break;
         case SDLK_w:
+            keyPressed = true;
             mCamera.mPosition.y += mCamera.mSpeed;
             break;
         case SDLK_s:
+            keyPressed = true;
             mCamera.mPosition.y -= mCamera.mSpeed;
             break;
+        case SDLK_r:
+            keyPressed = true;
+            mCamera.mPosition.x = 0.0f;
+            mCamera.mPosition.y = 0.0f;
+            break;
+    }
+
+    if (keyPressed) {
+        mCamera.UpdateSpeed();
+    } else {
+        mCamera.Decelerate();
     }
 
     if (!(mWindowFocused && mWindowHovered)) {
@@ -264,4 +239,56 @@ void LevelEditor::UpdateCamera(SDL_Event& event) {
     if (1.0 > mCamera.mZoom) {
         mCamera.mZoom = 1.0f;
     }
+}
+
+void LevelEditor::Render() {
+    if (!mLevelOpen && FileIndicesValid()) {
+        return;
+    }
+
+    SDL_Renderer* renderer = Application::Instance()->GetMainRenderer();
+    SDL_SetRenderTarget(renderer, mTexture);
+    
+    // start drawing
+    
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    for (auto i = 0; i < mCurrentMapbin.GetNumWalls(); i++) {
+        auto& wall = mCurrentMapbin.GetWall(i);
+        SDL_FPoint start = {wall.GetStart(). x,wall.GetStart().y};
+        SDL_FPoint end = {wall.GetEnd().x, wall.GetEnd().y};
+
+        AdjustPosition(start);
+        AdjustPosition(end);
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
+    }
+
+    for (auto i = 0; i < mCurrentMapbin.GetNumGimmicks(); i++) {
+        auto& gimmick = mCurrentMapbin.GetGimmick(i);
+        SDL_FPoint points[2];
+
+        points[0] = {gimmick.GetPosition().x, gimmick.GetPosition().y};
+        points[1] = {points[0].x + 4.0f, points[0].y + 4.0f};
+
+        AdjustPosition(points[0]);
+        AdjustPosition(points[1]);
+
+        SDL_SetRenderDrawColor(renderer, 0x78, 0xE3, 0xFD, 255);
+        SDL_RenderDrawLinesF(renderer, points, 2);
+    }
+
+
+    // end drawing
+
+    ImGui::GetWindowDrawList()->AddImage(
+        static_cast<void*>(mTexture),
+        ImGui::GetWindowPos(),
+        ImGui::GetWindowPos() + ImGui::GetWindowSize(),
+        {0.0f, 0.0f}, {1.0f, 1.0f}
+    );
+
+    SDL_SetRenderTarget(renderer, nullptr);
 }

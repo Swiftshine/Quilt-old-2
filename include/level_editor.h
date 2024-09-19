@@ -60,6 +60,14 @@ private:
         SetFileIndices(-1, -1);
     }
 
+    inline void AdjustPosition(SDL_FPoint& point) {
+        point.x *= mCamera.mZoom;
+        point.x += mCamera.mPosition.x;
+
+        point.y *= mCamera.mZoom;
+        point.y = mWindowSize.y - point.y + mCamera.mPosition.y;
+    }
+
 private:
     bool mIsActive;
     bool mTryOpenByName;

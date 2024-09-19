@@ -33,6 +33,39 @@ namespace Quilt {
     static std::string QuiltRoot = fs::current_path().string() + "/";
     static std::string SettingsPath = QuiltRoot + "quilt_settings.json";
 
+    template <typename T>
+    T ByteSwap(T value) {
+        T swapped;
+
+        char* src = reinterpret_cast<char*>(&value);
+        char* dst = reinterpret_cast<char*>(&swapped);
+
+        for (size_t i = 0; i < sizeof(T); i++) {
+            dst[i] = src[sizeof(T) - 1 - i];
+        }
+
+        return swapped;
+    }
+
+    template <typename T>
+    static inline void ByteSwapFromVector(const std::vector<char>& data, u32& offs, T& dest, bool offset = true) {
+        T raw = *(T*)(&data[offs]);
+        dest = ByteSwap(raw);
+
+        if (offset) {
+            offs += sizeof(T);
+        }
+    }
+
+    template <typename T>
+    static inline void GetFromVector(const std::vector<char>& data, u32& offs, T& dest, bool offset = true) {
+        std::memcpy(&dest, &data[offs], sizeof(T));
+
+        if (offset) {
+            offs += sizeof(T);
+        }
+    }
+
     class File {
     public:
         File() = default;

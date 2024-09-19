@@ -9,6 +9,7 @@ A <em>Kirby's Epic Yarn</em> (Wii) modding tool for various aspects of the game.
 - [ ] Collision Editor
 - [ ] GfArch Utility
 ### Roadmap
+- [ ] Gimmick data updates via internet
 - [ ] MNEB Rendering
 - [ ] BGST Rendering
 - [ ] Pre-rendered BRRES models

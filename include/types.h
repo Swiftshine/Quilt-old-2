@@ -23,8 +23,12 @@ struct Vec2f {
         , y(ny)
     { }
 
-    Vec2f operator+(Vec2f& other) {
+    Vec2f operator+(const Vec2f& other) const {
         return Vec2f(x + other.x, y + other.y);
+    }
+
+    Vec2f operator-(const Vec2f& other) const {
+        return Vec2f(x - other.x, y - other.y);
     }
     
     f32 x, y;

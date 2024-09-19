@@ -485,6 +485,10 @@ namespace Mapbin {
             return mCommonGimmicks[index];
         }
 
+        u32 GetNumCommonGimmicks() {
+            return mCommonGimmicks.size();
+        }
+
         void AddCommonGimmick(CommonGimmickWrapper wrapper) {
             mCommonGimmicks.push_back(wrapper);
         }
@@ -495,6 +499,10 @@ namespace Mapbin {
 
         GimmickWrapper& GetGimmick(u32 index) {
             return mGimmicks[index];
+        }
+
+        u32 GetNumGimmicks() {
+            return mGimmicks.size();
         }
 
         void AddGimmick(GimmickWrapper wrapper) {
@@ -546,34 +554,28 @@ namespace Mapbin {
             ClearAll();
             
             u32 offs = 0;
-            m_0 = SwapF32(*(f32*)&data[offs]);
-            offs += sizeof(f32);
 
-            mBoundsMin.x = SwapF32(*(f32*)&data[offs]);
-            offs += sizeof(f32);
-            mBoundsMin.y = SwapF32(*(f32*)&data[offs]);
-            offs += sizeof(f32);
-            mBoundsMax.x = SwapF32(*(f32*)&data[offs]);
-            offs += sizeof(f32);
-            mBoundsMax.y = SwapF32(*(f32*)&data[offs]);
-            offs += sizeof(f32);
+            Quilt::ByteSwapFromVector(data, offs, m_0);
+            Quilt::ByteSwapFromVector(data, offs, mBoundsMin.x);
+            Quilt::ByteSwapFromVector(data, offs, mBoundsMin.y);
+            Quilt::ByteSwapFromVector(data, offs, mBoundsMax.x);
+            Quilt::ByteSwapFromVector(data, offs, mBoundsMax.y);
+            u32 numWalls;
+            Quilt::ByteSwapFromVector(data, offs, numWalls);
+            u32 wallOffs;
+            Quilt::ByteSwapFromVector(data, offs, wallOffs);
 
-            u32 numWalls = Swap32(*(u32*)&data[offs]);
-            offs += sizeof(u32);
-
-            u32 wallOffs = Swap32(*(u32*)&data[offs]);
-            offs += sizeof(u32);
 
             for (auto i = 0; i < numWalls; i++) {
                 WallWrapper wrapper;
                 Wall wall;
-                std::memcpy(&wall, &data[wallOffs], sizeof(Wall));
-                wallOffs += sizeof(Wall);
+                Quilt::GetFromVector(data, wallOffs, wall);
                 wrapper.SetStart(SwapF32(wall.mStart.x), SwapF32(wall.mStart.y));
                 wrapper.SetEnd(SwapF32(wall.mEnd.x), SwapF32(wall.mEnd.y));
+                wrapper.SetUnk10({SwapF32(wall.m_10.x), SwapF32(wall.m_10.y)});
                 mWalls.push_back(wrapper);
             }
-
+            
             // todo: the rest later
         }
         
