@@ -268,16 +268,26 @@ void LevelEditor::Render() {
 
     for (auto i = 0; i < mCurrentMapbin.GetNumGimmicks(); i++) {
         auto& gimmick = mCurrentMapbin.GetGimmick(i);
-        SDL_FPoint points[2];
+        SDL_FPoint points[5];
 
+        // bottom left
         points[0] = {gimmick.GetPosition().x, gimmick.GetPosition().y};
-        points[1] = {points[0].x + 4.0f, points[0].y + 4.0f};
+        // top left
+        points[1] = SDL_FPoint({points[0].x, points[0].y + 1.0f});
+        // top right
+        points[2] = SDL_FPoint({points[0].x + 1.0f, points[0].y + 1.0f});
+        // bottom right
+        points[3] = SDL_FPoint({points[0].x + 1.0f, points[0].y});
+        // bottom left
+        points[4] = points[0];
 
-        AdjustPosition(points[0]);
-        AdjustPosition(points[1]);
+        for (auto& point : points) {
+            AdjustPosition(point);
+        }
 
         SDL_SetRenderDrawColor(renderer, 0x78, 0xE3, 0xFD, 255);
-        SDL_RenderDrawLinesF(renderer, points, 2);
+        // SDL_RenderDrawRectF(renderer, &rect);
+        SDL_RenderDrawLinesF(renderer, points, ARRAY_LENGTH(points));
     }
 
 

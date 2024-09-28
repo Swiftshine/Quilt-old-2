@@ -7,8 +7,9 @@ public:
         mPosition = Vec2f(0, 0);
         mZoom = 1.0f;
         mSpeed = 1.0f;
-        mMaxSpeed = 15.0f;
-        mAcceleration = 0.1f; 
+        mMinSpeed = 5.0f;
+        mMaxSpeed = 25.0f;
+        mAcceleration = 1.0f; 
         mDeceleration = 0.05f;
     }
 
@@ -24,8 +25,8 @@ public:
     inline void Decelerate() {
         if (mSpeed > 1.0f) {
             mSpeed -= mDeceleration;
-            if (mSpeed < 1.0f) {
-                mSpeed = 1.0f;
+            if (mSpeed < mMinSpeed) {
+                mSpeed = mMinSpeed;
             }
         }
     }
@@ -36,6 +37,7 @@ public:
     Vec2f mPosition;
     float mZoom;
     float mSpeed;
+    float mMinSpeed;
     float mMaxSpeed;
     float mAcceleration;
     float mDeceleration;

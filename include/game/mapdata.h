@@ -170,6 +170,10 @@ namespace Mapbin {
             m_30 = value;
         }
 
+        void SetUnk30(const u8 array[0x10]) {
+            std::memcpy(m_30.data(), array, 0x10);
+        }
+
         Vec3f GetPosition() const {
             return mPosition;
         }
@@ -332,6 +336,10 @@ namespace Mapbin {
 
         void SetNumPoints(u32 value) {
             mNumPoints = value;
+        }
+
+        void AddPoint(Vec2f point) {
+            
         }
 
     private:
@@ -558,130 +566,7 @@ namespace Mapbin {
             mRaceCourseInfo.erase(mRaceCourseInfo.begin() + index);
         }
 
-        void Read(const std::vector<char>& data) {
-            ClearAll();
-
-            u32 offs = 0;
-            
-            u32 numWalls;
-            u32 wallOffset;
-            u32 numLabeledWalls;
-            u32 labeledWallOffset;
-            u32 numCommonGimmicks;
-            u32 commonGimmickOffset;
-            u32 numGimmicks;
-            u32 gimmickOffset;
-            u32 numPaths;
-            u32 pathOffset;
-            u32 numZones;
-            u32 zoneOffset;
-            u32 numCourseInfo;
-            u32 courseInfoOffset;
-            u32 commonGimmickNameOffset;
-            u32 numCommonGimmickNames;
-            u32 colbinTypeOffset;
-            u32 numColbinTypes;
-            u32 labeledWallLabelOffset;
-            u32 numLabeledWallLabels;
-
-            Quilt::ByteSwapFromVector(data, offs, m_0);
-            Quilt::ByteSwapFromVector(data, offs, mBoundsMin.x);
-            Quilt::ByteSwapFromVector(data, offs, mBoundsMin.y);
-            Quilt::ByteSwapFromVector(data, offs, mBoundsMax.x);
-            Quilt::ByteSwapFromVector(data, offs, mBoundsMax.y);
-            Quilt::ByteSwapFromVector(data, offs, numWalls);
-            Quilt::ByteSwapFromVector(data, offs, wallOffset);
-            Quilt::ByteSwapFromVector(data, offs, numLabeledWalls);
-            Quilt::ByteSwapFromVector(data, offs, labeledWallOffset);
-            Quilt::ByteSwapFromVector(data, offs, numCommonGimmicks);
-            Quilt::ByteSwapFromVector(data, offs, commonGimmickOffset);
-            Quilt::ByteSwapFromVector(data, offs, numGimmicks);
-            Quilt::ByteSwapFromVector(data, offs, gimmickOffset);
-            Quilt::ByteSwapFromVector(data, offs, numPaths);
-            Quilt::ByteSwapFromVector(data, offs, pathOffset);
-            Quilt::ByteSwapFromVector(data, offs, numZones);
-            Quilt::ByteSwapFromVector(data, offs, zoneOffset);
-            Quilt::ByteSwapFromVector(data, offs, numCourseInfo);
-            Quilt::ByteSwapFromVector(data, offs, courseInfoOffset);
-            Quilt::ByteSwapFromVector(data, offs, commonGimmickNameOffset);
-            Quilt::ByteSwapFromVector(data, offs, colbinTypeOffset);
-            Quilt::ByteSwapFromVector(data, offs, labeledWallLabelOffset);
-
-            Quilt::ByteSwapFromVector(data, commonGimmickNameOffset, numCommonGimmickNames, false);
-            Quilt::ByteSwapFromVector(data, colbinTypeOffset, numColbinTypes, false);
-            Quilt::ByteSwapFromVector(data, labeledWallLabelOffset, numLabeledWallLabels, false);
-
-            // at this point, "offs" can be used for whatever
-
-            for (auto i = 0; i < numWalls; i++) {
-                Wall wall;
-                WallWrapper wrapper;
-
-                Quilt::GetFromVector(data, wallOffset, wall);
-                wrapper.SetStart(SwapF32(wall.mStart.x), SwapF32(wall.mStart.y));
-                wrapper.SetEnd(SwapF32(wall.mEnd.x), SwapF32(wall.mEnd.y));
-                wrapper.SetUnk10({SwapF32(wall.m_10.x), SwapF32(wall.m_10.y)});
-
-                if (0 < numColbinTypes) {
-                    string32 name { 0 };
-                    
-                    offs = colbinTypeOffset + 4 + (sizeof(string32) * i);
-                    Quilt::GetFromVector(data, offs, name);
-                    wrapper.SetCollisionType(name);
-                }
-
-                mWalls.push_back(wrapper);
-            }
-
-            for (auto i = 0; i < numLabeledWalls; i++) {
-                LabeledWall wall;
-                LabeledWallWrapper wrapper;
-
-                Quilt::GetFromVector(data, labeledWallOffset, wall);
-                wrapper.SetStart(SwapF32(wall.mStart.x), SwapF32(wall.mStart.y));
-                wrapper.SetEnd(SwapF32(wall.mEnd.x), SwapF32(wall.mEnd.y));
-                wrapper.SetUnk10({SwapF32(wall.m_10.x), SwapF32(wall.m_10.y)});
-
-                if (0 < numColbinTypes) {
-                    string32 name { 0 };
-                    offs = colbinTypeOffset + 4 + (sizeof(string32) * i);
-                    Quilt::GetFromVector(data, offs, name);
-                    wrapper.SetCollisionType(name);
-                }
-                
-                if (0 < numLabeledWallLabels) {
-                    string32 name { 0 };
-                    offs = labeledWallLabelOffset + 4 + (sizeof(string32) * i);
-                    Quilt::GetFromVector(data, offs, name);
-                    wrapper.SetLabel(name);
-                }
-
-                mLabeledWalls.push_back(wrapper);
-            }
-
-
-            for (auto i = 0; i < numCommonGimmicks; i++) {
-                CommonGimmick cgmk;
-                CommonGimmickWrapper wrapper;
-
-                Quilt::GetFromVector(data, commonGimmickOffset, cgmk);
-
-                for (auto j = 0; j < 3; j++) {
-                    wrapper.GetParams().SetIntParam1(j, Swap32(cgmk.mParams.mIntParams1[j]));
-                    wrapper.GetParams().SetIntParam2(j, Swap32(cgmk.mParams.mIntParams2[j]));
-                    wrapper.GetParams().SetFloatParam1(j, SwapF32(cgmk.mParams.mFloatParams1[j]));
-                    wrapper.GetParams().SetFloatParam2(j, SwapF32(cgmk.mParams.mFloatParams2[j]));
-                    wrapper.GetParams().SetFloatParam3(j, SwapF32(cgmk.mParams.mFloatParams3[j]));
-                }
-                wrapper.GetParams().SetIntParam2(3, Swap32(cgmk.mParams.mIntParams1[3]));
-            }
-
-            for (auto i = 0; i < numGimmicks; i++) {
-                
-            }
-            
-            // todo: the rest later
-        }
+        void Read(const std::vector<char>& data);
         
         void Save() const;
 
@@ -694,6 +579,7 @@ namespace Mapbin {
             mZones.clear();
             mRaceCourseInfo.clear();
         }
+        
     private:
         f32 m_0;
         Vec2f mBoundsMin;

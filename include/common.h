@@ -29,6 +29,10 @@ using ordered_json = nlohmann::ordered_json;
 #include "types.h"
 #include "quilt_util.h"
 
+inline std::string CharArrayToString(char arr[], size_t len) {
+    return std::string(arr, len);
+}
+
 namespace Quilt {
     static std::string QuiltRoot = fs::current_path().string() + "/";
     static std::string SettingsPath = QuiltRoot + "quilt_settings.json";

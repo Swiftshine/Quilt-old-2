@@ -70,3 +70,5 @@ static f32 SwapF32(float value) {
     std::memcpy(&result, &intval, sizeof(float));
     return result;
 }
+
+#define ARRAY_LENGTH(x) (sizeof((x)) / sizeof((x)[0]))
