@@ -249,10 +249,13 @@ void LevelEditor::Render() {
     SDL_Renderer* renderer = Application::Instance()->GetMainRenderer();
     SDL_SetRenderTarget(renderer, mTexture);
     
-    // start drawing
-    
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+    
+    // start drawing
+    
+    // static LE_Selectable sel;
+    // sel.Update(renderer);
 
     for (auto i = 0; i < mCurrentMapbin.GetNumWalls(); i++) {
         auto& wall = mCurrentMapbin.GetWall(i);

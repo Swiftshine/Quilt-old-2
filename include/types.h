@@ -14,10 +14,58 @@ using s16 = int16_t;
 using u8  = uint8_t;
 using s8  = int8_t;
 
+using uint = unsigned int;
 using Offset = u32;
 
+struct RGBA {
+    RGBA() {
+        color = 0;
+    }
+    
+    RGBA(const RGBA& other) {
+        color = other.color;
+    }
+
+    RGBA(const u32 val) {
+        color = val;
+    }
+
+    RGBA(const u8 red, const u8 green, const u8 blue, const u8 alpha) {
+        r = red;
+        g = green;
+        b = blue;
+        a = alpha;
+    }
+
+    union {
+        u32 color;
+
+        struct {
+            u8 r;
+            u8 g;
+            u8 b;
+            u8 a;
+        };
+    };
+};
+
+
 struct Vec2f {
-    Vec2f() = default;
+    Vec2f() {
+        x = 0;
+        y = 0;
+    }
+
+    Vec2f(const float val) {
+        x = val;
+        y = val;
+    }
+
+    Vec2f(const Vec2f& other) {
+        x = other.x;
+        y = other.y;
+    }
+
     Vec2f(float nx, float ny)
         : x(nx)
         , y(ny)
@@ -30,9 +78,31 @@ struct Vec2f {
     Vec2f operator-(const Vec2f& other) const {
         return Vec2f(x - other.x, y - other.y);
     }
+
+    Vec2f operator*(const Vec2f& other) const {
+        return Vec2f(x * other.x, y * other.y);
+    }
+
+    Vec2f operator*(const float val) const {
+        return Vec2f(x * val, y * val);
+    }
+
+    inline void operator=(const float val) {
+        x = val;
+        y = val;
+    }
     
+    inline ImVec2 ToImVec2() {
+        return ImVec2(x, y);
+    }
+    
+
     f32 x, y;
 };
+
+inline Vec2f ToVec2f(const ImVec2 vec) {
+    return Vec2f(vec.x, vec.y);
+}
 
 struct Vec3f {
     f32 x, y, z;

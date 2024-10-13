@@ -4,6 +4,8 @@
 #include "game/mapdata.h"
 #include "camera.h"
 
+#include "level_editor/le_selectable.h"
+
 // the same thing can be done with std::pair,
 // but this is easier to read
 struct EnbinMapbinIndices {
