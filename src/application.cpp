@@ -1,5 +1,5 @@
 #include "application.h"
-#include "level_editor.h"
+#include "level_editor/level_editor.h"
 
 Application::Application() {
     mMainWindow = nullptr;

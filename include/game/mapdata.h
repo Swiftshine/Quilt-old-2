@@ -59,8 +59,7 @@ namespace Mapbin {
         int mIntParams2[4];
         float mFloatParams2[3];
         float mFloatParams3[3];
-        string32 mStringParam1;
-        u8 mTheRest[0x120];
+        string64 mStringParams[3];
     };
 
     struct CommonGimmick {
@@ -239,24 +238,12 @@ namespace Mapbin {
             mFloatParams3[index] = value;
         }
 
-        std::string GetStringParam1() const {
-            return mStringParam1;
+        std::string GetStringParam(u32 index) const {
+            return mStringParams[index];
         }
 
-        void SetStringParam1(const std::string& value) {
-            mStringParam1 = value;
-        }
-
-        std::array<u8, 0x120> GetTheRest() const {
-            return mTheRest;
-        }
-
-        void SetTheRest(const std::array<u8, 0x120>& value) {
-            mTheRest = value;
-        }
-
-        void SetTheRest(char arr[0x120]) {
-            std::memcpy(arr, mTheRest.data(), 0x120);
+        void SetStringParam(u32 index, const std::string& value) {
+            mStringParams[index] = value;
         }
 
     private:
@@ -265,8 +252,7 @@ namespace Mapbin {
         int mIntParams2[4];
         f32 mFloatParams2[3];
         f32 mFloatParams3[3];
-        std::string mStringParam1;
-        std::array<u8, 0x120> mTheRest;
+        std::string mStringParams[3];
     };
 
 

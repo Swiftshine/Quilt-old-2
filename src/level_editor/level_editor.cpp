@@ -1,4 +1,4 @@
-#include "level_editor.h"
+#include "level_editor/level_editor.h"
 #include "application.h"
 #include "gfarch_utility.h"
 

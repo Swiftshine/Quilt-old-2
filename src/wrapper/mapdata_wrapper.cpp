@@ -114,6 +114,8 @@ void Mapdata::Mapbin::FileWrapper::Read(const std::vector<char>& data) {
             wrapper.GetParams().SetFloatParam1(j, SwapF32(cgmk.mParams.mFloatParams1[j]));
             wrapper.GetParams().SetFloatParam2(j, SwapF32(cgmk.mParams.mFloatParams2[j]));
             wrapper.GetParams().SetFloatParam3(j, SwapF32(cgmk.mParams.mFloatParams3[j]));
+            wrapper.GetParams().SetStringParam(j, CharArrayToString(cgmk.mParams.mStringParams[j], sizeof(string64)));
+            
         }
         wrapper.GetParams().SetIntParam2(3, Swap32(cgmk.mParams.mIntParams1[3]));
 
