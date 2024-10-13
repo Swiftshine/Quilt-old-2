@@ -30,7 +30,7 @@ bool Settings::LoadFromDisk() {
     
     mGameRoot = contents[Settings_GameRoot];
     
-    if (mGameRoot[mGameRoot.length() - 1] != '/') {
+    if ('/' != mGameRoot[mGameRoot.length() - 1]) {
         mGameRoot += "/";
     }
     
@@ -42,9 +42,14 @@ bool Settings::LoadFromDisk() {
 }
 
 void Settings::SaveToDisk() {
+    // ordered_json is used to preserve the order of json fields --
+    // they are written to disk in the order they are written in code.
+    // this is useful for maintaining organisation if the user
+    // ever wanted to edit a json (in this case, settings) manually
+
     ordered_json contents;
 
-    if (mGameRoot[mGameRoot.length() - 1] != '/') {
+    if ('/' != mGameRoot[mGameRoot.length() - 1]) {
         mGameRoot += "/";
     }
 
