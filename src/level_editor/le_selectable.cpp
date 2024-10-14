@@ -10,13 +10,7 @@ LE_Selectable::LE_Selectable() {
 LE_Selectable::~LE_Selectable() { }
 
 void LE_Selectable::HandleDrag(const Camera& camera) {
-    //// dragging works, but the mouse is almost never actually
-    //// aligned with the node itself.
-    //! dragging no longer works, fix this
-
     mCameraPosition = camera.ToCamera(mWorldPosition);
-
-    mWorldPosition = camera.ToWorld(mCameraPosition);
 
     Vec2f mousePos = ToVec2f(ImGui::GetMousePos());
 
@@ -26,7 +20,7 @@ void LE_Selectable::HandleDrag(const Camera& camera) {
         // we were clicked
         // check if we were being dragged as well
 
-        mDragOffset = (mousePos - mWorldPosition) * -1.0f;
+        mDragOffset = (mousePos - mCameraPosition);
 
         mSelectState = SelectState::Selected;
 
@@ -48,6 +42,7 @@ void LE_Selectable::HandleDrag(const Camera& camera) {
 
     if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && SelectState::Dragged == mSelectState) {
         mCameraPosition = mousePos + mDragOffset;
+        mWorldPosition = camera.ToWorld(mCameraPosition);
         // mWorldPosition.x = camera.ToWorld(mousePos).x + mDragOffset.x;
         // mWorldPosition.y = camera.ToWorld(mousePos).y + mDragOffset.y;
         // mWorldPosition = camera.ToWorld(mCameraPosition);
@@ -72,6 +67,7 @@ void LE_Selectable::Draw(const Camera& camera, SDL_Renderer* renderer) {
         case SelectState::Selected:
             drawCol = mColor;
             break;
+        case SelectState::Dragged:
         case SelectState::Hovered:
             drawCol = RGBA(mColor.r * 0.8f, mColor.g * 0.8f, mColor.b * 0.8f, mColor.a);
             break;
@@ -85,18 +81,18 @@ void LE_Selectable::Draw(const Camera& camera, SDL_Renderer* renderer) {
 
     SDL_SetRenderDrawColor(renderer, drawCol.r, drawCol.g, drawCol.b, drawCol.a);
 
-    SDL_Rect rect;
+    SDL_FRect rect;
     Vec2f pos = camera.ToCamera(mWorldPosition);
 
-    rect.x = static_cast<int>(pos.x);
-    rect.y = static_cast<int>(pos.y);
-    rect.w = static_cast<int>(mDimensions.x);
-    rect.h = static_cast<int>(mDimensions.y * -1.0f);
+    rect.x = pos.x + mDimensions.x;
+    rect.y = pos.y;
+    rect.w = mDimensions.x;
+    rect.h = mDimensions.y;
 
     if (SelectState::Selected == mSelectState) {
-        SDL_RenderFillRect(renderer, &rect);
+        SDL_RenderFillRectF(renderer, &rect);
     } else {
-        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderDrawRectF(renderer, &rect);
     }
 }
 

@@ -99,16 +99,32 @@ struct Vec2f {
         return Vec2f(x / val, y / val);
     }
 
+    void operator/=(const Vec2f& other) {
+        x /= other.x;
+        y /= other.y;    
+    }
+
     Vec2f operator*(const float val) const {
         return Vec2f(x * val, y * val);
     }
 
-    inline void operator=(const float val) {
+    void operator*=(const Vec2f& other) {
+        x *= other.x;
+        y *= other.y;    
+    }
+
+    void operator*=(const float other) {
+        x *= other;
+        y *= other;    
+    }
+
+
+    void operator=(const float val) {
         x = val;
         y = val;
     }
 
-    inline ImVec2 ToImVec2() {
+    ImVec2 ToImVec2() {
         return ImVec2(x, y);
     }
     
