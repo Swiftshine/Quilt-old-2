@@ -112,3 +112,9 @@ inline ImVec2 operator+(ImVec2 lhs, ImVec2 rhs) {
 inline std::string strippath(std::string& path) {
     return path.substr(path.find_last_of("\\/") + 1);
 }
+
+#define DEBUG_MOUSE_SQUARE() {  \
+    do { \
+        \
+    } while(0); \
+}

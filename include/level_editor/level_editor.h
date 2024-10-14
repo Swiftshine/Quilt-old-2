@@ -41,7 +41,7 @@ private:
     void ProcessLevelContents();
     void ShowFiles();
 
-    inline bool FileIndicesValid() {
+    bool FileIndicesValid() {
         if (-1 == mCurrentFileIndex.mEnbinIndex || -1 == mCurrentFileIndex.mMapbinIndex) {
             return false;
         }
@@ -53,22 +53,21 @@ private:
         return true;
     }
 
-    inline void SetFileIndices(int a, int b) {
+    void SetFileIndices(int a, int b) {
         mCurrentFileIndex.mEnbinIndex = a;
         mCurrentFileIndex.mMapbinIndex = b;
     }
 
-    inline void InvalidateFileIndices() {
+    void InvalidateFileIndices() {
         SetFileIndices(-1, -1);
     }
 
-    inline void AdjustPosition(SDL_FPoint& point) {
-        point.x *= mCamera.mZoom;
-        point.x += mCamera.mPosition.x;
-
-        point.y *= mCamera.mZoom;
-        point.y = mWindowSize.y - point.y + mCamera.mPosition.y;
+    void ClearSelectables() {
+        mSelectedSelectables.clear();
+        
+        mGimmickSelectables.clear();
     }
+
 
 private:
     bool mIsActive;
@@ -81,8 +80,8 @@ private:
     EnbinMapbinIndices mCurrentFileIndex;
     Mapdata::Mapbin::FileWrapper mCurrentMapbin;
     Camera mCamera;
-    Vec2f mWindowPosition;
-    Vec2f mWindowSize;
     bool mWindowFocused;
     bool mWindowHovered;
+    std::vector<LE_Selectable> mGimmickSelectables;
+    std::vector<LE_Selectable*> mSelectedSelectables;
 };

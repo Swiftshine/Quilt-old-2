@@ -49,6 +49,9 @@ struct RGBA {
     };
 };
 
+struct Vec3f {
+    f32 x, y, z;
+};
 
 struct Vec2f {
     Vec2f() {
@@ -62,6 +65,11 @@ struct Vec2f {
     }
 
     Vec2f(const Vec2f& other) {
+        x = other.x;
+        y = other.y;
+    }
+
+    Vec2f(const Vec3f& other) {
         x = other.x;
         y = other.y;
     }
@@ -83,6 +91,14 @@ struct Vec2f {
         return Vec2f(x * other.x, y * other.y);
     }
 
+    Vec2f operator/(const Vec2f& other) const {
+        return Vec2f(x / other.x, y / other.y);
+    }
+
+    Vec2f operator/(const float val) const {
+        return Vec2f(x / val, y / val);
+    }
+
     Vec2f operator*(const float val) const {
         return Vec2f(x * val, y * val);
     }
@@ -91,7 +107,7 @@ struct Vec2f {
         x = val;
         y = val;
     }
-    
+
     inline ImVec2 ToImVec2() {
         return ImVec2(x, y);
     }
@@ -104,9 +120,6 @@ inline Vec2f ToVec2f(const ImVec2 vec) {
     return Vec2f(vec.x, vec.y);
 }
 
-struct Vec3f {
-    f32 x, y, z;
-};
 
 static f32 SwapF32(f32);
 

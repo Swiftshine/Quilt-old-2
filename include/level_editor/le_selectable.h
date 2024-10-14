@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "camera.h"
 
 class LE_Selectable {
 public:
@@ -13,20 +14,25 @@ public:
     LE_Selectable();
     ~LE_Selectable();
 
-    void Draw(SDL_Renderer* renderer);
-    void HandleDrag();
-    void Update(SDL_Renderer* renderer);
+    void Draw(const Camera& camera, SDL_Renderer* renderer);
+    void HandleDrag(const Camera& camera);
+    void Update(const Camera& camera, SDL_Renderer* renderer);
 
-    inline bool CheckHover() {
-        return ImGui::IsMouseHoveringRect(mPosition.ToImVec2(), (mPosition + mDimensions).ToImVec2());
+    inline bool CheckHover(const Camera& camera) {
+        Vec2f mousePos = ToVec2f(ImGui::GetMousePos());
+        // camera.ToWorld(mousePos);
+
+        return mousePos.x >= mCameraPosition.x && mousePos.x <= (mCameraPosition.x + mDimensions.x) &&
+           mousePos.y >= mCameraPosition.y && mousePos.y <= (mCameraPosition.y + mDimensions.y);
     }
 
-    inline bool CheckLeftClick() {
-        return ImGui::IsMouseClicked(ImGuiMouseButton_Left) && CheckHover();
+
+    inline bool CheckLeftClick(const Camera& camera) {
+        return ImGui::IsMouseClicked(ImGuiMouseButton_Left) && CheckHover(camera);
     }
 
-    inline bool CheckMouseDown() {
-        return ImGui::IsMouseDown(ImGuiMouseButton_Left) && CheckHover();
+    inline bool CheckMouseDown(const Camera& camera) {
+        return ImGui::IsMouseDown(ImGuiMouseButton_Left) && CheckHover(camera);
     }
 
     SelectState GetState() const {
@@ -46,15 +52,15 @@ public:
     }
 
     inline Vec2f GetPosition() const {
-        return mPosition;
+        return mWorldPosition;
     }
 
     inline void SetPosition(const Vec2f pos) {
-        mPosition = pos;
+        mWorldPosition = pos;
     }
 
     inline void SetPosition(const float x, const float y) {
-        mPosition = Vec2f(x, y);
+        mWorldPosition = Vec2f(x, y);
     }
 
     inline Vec2f GetDimensions() const {
@@ -71,7 +77,8 @@ public:
     
 private:
     SelectState mSelectState;
-    Vec2f mPosition;
+    Vec2f mCameraPosition;
+    Vec2f mWorldPosition;
     Vec2f mDimensions;
     Vec2f mDragOffset;
     RGBA mColor;

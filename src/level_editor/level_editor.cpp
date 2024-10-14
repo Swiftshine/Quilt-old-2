@@ -1,4 +1,5 @@
 #include "level_editor/level_editor.h"
+#include "level_editor/le_selectable.h"
 #include "application.h"
 #include "gfarch_utility.h"
 
@@ -25,6 +26,7 @@ LevelEditor::LevelEditor() {
 
 LevelEditor::~LevelEditor() {
     mLevelList.clear();
+    mGimmickSelectables.clear();
 }
 
 void LevelEditor::Run() {
@@ -41,8 +43,9 @@ void LevelEditor::Run() {
     }
     
     ShowFiles();
-    mWindowPosition = {ImGui::GetWindowPos().x, ImGui::GetWindowPos().y};
-    mWindowSize = {ImGui::GetWindowSize().x, ImGui::GetWindowSize().y};
+
+    mCamera.mWindowPosition = {ImGui::GetWindowPos().x, ImGui::GetWindowPos().y};
+    mCamera.mWindowDimensions = {ImGui::GetWindowSize().x, ImGui::GetWindowSize().y};
     mWindowHovered = ImGui::IsWindowHovered();
     mWindowFocused = ImGui::IsWindowFocused();
 
@@ -154,9 +157,21 @@ void LevelEditor::ProcessLevelContents() {
     if (!mLevelOpen && FileIndicesValid()) {
         return;
     }
-
-    std::vector<char> data = mCurrentLevelContents[mCurrentFileIndex.mMapbinIndex].GetData();
+    
+    
+    const std::vector<char>& data = mCurrentLevelContents[mCurrentFileIndex.mMapbinIndex].GetData();
     mCurrentMapbin.Read(data);
+
+
+    // add selectables
+    ClearSelectables();
+
+    for (auto i = 0; i < mCurrentMapbin.GetNumGimmicks(); i++) {
+        auto& gmk = mCurrentMapbin.GetGimmick(i);
+        LE_Selectable sel;
+        sel.SetPosition(gmk.GetPosition());
+        mGimmickSelectables.push_back(sel);
+    }
 }
 
 void LevelEditor::ShowFiles() {
@@ -236,7 +251,7 @@ void LevelEditor::UpdateCamera(SDL_Event& event) {
         }
     }
 
-    if (1.0 > mCamera.mZoom) {
+    if (1.0f > mCamera.mZoom) {
         mCamera.mZoom = 1.0f;
     }
 }
@@ -253,45 +268,49 @@ void LevelEditor::Render() {
     SDL_RenderClear(renderer);
     
     // start drawing
-    
-    // static LE_Selectable sel;
-    // sel.Update(renderer);
 
     for (auto i = 0; i < mCurrentMapbin.GetNumWalls(); i++) {
         auto& wall = mCurrentMapbin.GetWall(i);
         SDL_FPoint start = {wall.GetStart(). x,wall.GetStart().y};
         SDL_FPoint end = {wall.GetEnd().x, wall.GetEnd().y};
-
-        AdjustPosition(start);
-        AdjustPosition(end);
+        
+        start = mCamera.ToCamera(start);
+        end = mCamera.ToCamera(end);;
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
     }
 
-    for (auto i = 0; i < mCurrentMapbin.GetNumGimmicks(); i++) {
-        auto& gimmick = mCurrentMapbin.GetGimmick(i);
-        SDL_FPoint points[5];
+    if (!mGimmickSelectables.empty()) {
+        mGimmickSelectables[0].Update(mCamera, renderer);
+    }    
+    
+    // for (auto& gmk : mGimmickSelectables) {
+    //     gmk.Update(mCamera, renderer);
+    // }
+    // for (auto i = 0; i < mCurrentMapbin.GetNumGimmicks(); i++) {
+    //     auto& gimmick = mCurrentMapbin.GetGimmick(i);
+    //     SDL_FPoint points[5];
 
-        // bottom left
-        points[0] = {gimmick.GetPosition().x, gimmick.GetPosition().y};
-        // top left
-        points[1] = SDL_FPoint({points[0].x, points[0].y + 1.0f});
-        // top right
-        points[2] = SDL_FPoint({points[0].x + 1.0f, points[0].y + 1.0f});
-        // bottom right
-        points[3] = SDL_FPoint({points[0].x + 1.0f, points[0].y});
-        // bottom left
-        points[4] = points[0];
+    //     // bottom left
+    //     points[0] = {gimmick.GetPosition().x, gimmick.GetPosition().y};
+    //     // top left
+    //     points[1] = SDL_FPoint({points[0].x, points[0].y + 1.0f});
+    //     // top right
+    //     points[2] = SDL_FPoint({points[0].x + 1.0f, points[0].y + 1.0f});
+    //     // bottom right
+    //     points[3] = SDL_FPoint({points[0].x + 1.0f, points[0].y});
+    //     // bottom left
+    //     points[4] = points[0];
 
-        for (auto& point : points) {
-            AdjustPosition(point);
-        }
+    //     for (auto& point : points) {
+    //         mCamera.AdjustPosition(point);
+    //     }
 
-        SDL_SetRenderDrawColor(renderer, 0x78, 0xE3, 0xFD, 255);
-        // SDL_RenderDrawRectF(renderer, &rect);
-        SDL_RenderDrawLinesF(renderer, points, ARRAY_LENGTH(points));
-    }
+    //     SDL_SetRenderDrawColor(renderer, 0x78, 0xE3, 0xFD, 255);
+    //     // SDL_RenderDrawRectF(renderer, &rect);
+    //     SDL_RenderDrawLinesF(renderer, points, ARRAY_LENGTH(points));
+    // }
 
 
     // end drawing

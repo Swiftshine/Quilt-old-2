@@ -30,11 +30,48 @@ public:
             }
         }
     }
+
+    inline SDL_FPoint ToCamera(const SDL_FPoint& point) const {
+        SDL_FPoint ret = point;
+
+        ret.x *= mZoom;
+        ret.x += mPosition.x;
+
+        ret.y *= mZoom;
+        ret.y = mWindowDimensions.y - ret.y + mPosition.y;
+
+        return ret;
+    }
+
+    inline Vec2f ToCamera(const Vec2f& point) const {
+        Vec2f ret = point;
+
+        ret.x *= mZoom;
+        ret.x += mPosition.x;
+
+        ret.y *= mZoom;
+        ret.y = mWindowDimensions.y - ret.y + mPosition.y;
+
+        return ret;
+    }
+
+    inline Vec2f ToWorld(const Vec2f& point) const {
+        Vec2f ret = point;
+        ret.x -= mPosition.x;
+        ret.x /= mZoom;
+
+        ret.y = mWindowDimensions.y - ret.y;
+        ret.y -= mPosition.y;
+        ret.y /= mZoom;
+        return ret;
+    }
     
     ~Camera() = default;
 
 public:
     Vec2f mPosition;
+    Vec2f mWindowPosition;
+    Vec2f mWindowDimensions;
     float mZoom;
     float mSpeed;
     float mMinSpeed;
