@@ -33,37 +33,35 @@ public:
 
     inline SDL_FPoint ToCamera(const SDL_FPoint& point) const {
         SDL_FPoint ret = point;
-
-        ret.x *= mZoom;
-        ret.x += mPosition.x;
-
-        ret.y *= mZoom;
-        ret.y = mWindowDimensions.y - ret.y + mPosition.y;
-
+        ret.x = ret.x * mZoom + mPosition.x;
+        ret.y = -(ret.y * mZoom) + mWindowDimensions.y + mPosition.y;
         return ret;
     }
 
     inline Vec2f ToCamera(const Vec2f& point) const {
         Vec2f ret = point;
-
-        ret.x *= mZoom;
-        ret.x += mPosition.x;
-
-        ret.y *= mZoom;
-        ret.y = mWindowDimensions.y - ret.y + mPosition.y;
-
+        ret.x = ret.x * mZoom + mPosition.x;
+        ret.y = -(ret.y * mZoom) + mWindowDimensions.y + mPosition.y;
         return ret;
     }
 
     inline Vec2f ToWorld(const Vec2f& point) const {
         Vec2f ret = point;
-        ret.x -= mPosition.x;
-        ret.x /= mZoom;
-
-        ret.y = mWindowDimensions.y - ret.y;
-        ret.y -= mPosition.y;
-        ret.y /= mZoom;
+        ret.x = (ret.x - mPosition.x) / mZoom;
+        ret.y = -(ret.y - mWindowDimensions.y - mPosition.y) / mZoom;
         return ret;
+    }
+
+    inline Vec2f MouseToWorld() const {
+        int mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
+        Vec2f mouse;
+        
+        mouse.x = (static_cast<float>(mouseX) - mPosition.x) / mZoom;
+        mouse.y = -(static_cast<float>(mouseY) - mWindowDimensions.y - mPosition.y) / mZoom;
+        
+        return mouse;
     }
     
     ~Camera() = default;

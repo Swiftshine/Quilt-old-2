@@ -3,57 +3,106 @@
 
 LE_Selectable::LE_Selectable() {
     mSelectState = SelectState::Deselected;
-    mColor = 0xFF6666FF;
+    mColor = 0xFF0000FF;
     mDimensions = 16.0f;
 }
 
 LE_Selectable::~LE_Selectable() { }
 
 void LE_Selectable::HandleDrag(const Camera& camera) {
-    mCameraPosition = camera.ToCamera(mWorldPosition);
+    // take our world position and use the mouse position adjusted to the world to 
+    // move our world position
 
-    Vec2f mousePos = ToVec2f(ImGui::GetMousePos());
+    Vec2f mousePos = camera.MouseToWorld();
 
     // check if we were clicked
-
     if (CheckLeftClick(camera) && SelectState::Dragged != mSelectState) {
+        AppLog::Print("Clicked X: " + std::to_string(mWorldPosition.x) + " Y: " + std::to_string(mWorldPosition.y));
         // we were clicked
-        // check if we were being dragged as well
-
-        mDragOffset = (mousePos - mCameraPosition);
-
         mSelectState = SelectState::Selected;
+
+        // determine if we are being dragged
+
+        mDragOffset = mousePos - mWorldPosition;
 
         if (0.0f != mDragOffset.x || 0.0f != mDragOffset.y) {
             mSelectState = SelectState::Dragged;
         }
     } else if (CheckHover(camera) && SelectState::Dragged != mSelectState) {
-        
         // we are being hovered
         mSelectState = SelectState::Hovered;
-
-    } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) || SelectState::Hovered == mSelectState) {
+    } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) || SelectState::Hovered == mSelectState) {
         // the user either clicked off (selected/dragged)
         // or moved the mouse away (hovered)
         mSelectState = SelectState::Deselected; 
     }
 
-    // adjust position while being dragged
-
     if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && SelectState::Dragged == mSelectState) {
-        mCameraPosition = mousePos + mDragOffset;
-        mWorldPosition = camera.ToWorld(mCameraPosition);
-        // mWorldPosition.x = camera.ToWorld(mousePos).x + mDragOffset.x;
-        // mWorldPosition.y = camera.ToWorld(mousePos).y + mDragOffset.y;
-        // mWorldPosition = camera.ToWorld(mCameraPosition);
+        // mWorldPosition = mWorldPosition + mDragOffset;
+        // mWorldPosition = mousePos;
+
+        mWorldPosition = mousePos - mDragOffset;
+        AppLog::Print("Dragging X: " + std::to_string(mWorldPosition.x) + " Y: " + std::to_string(mWorldPosition.y));
     }
-
-    // check if we are finally in a "selected" state
-
+    
     if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && SelectState::Dragged == mSelectState) {
         mSelectState = SelectState::Selected;
+        mDragOffset = 0.0f;
+        AppLog::Print("Ending X: " + std::to_string(mWorldPosition.x) + " Y: " + std::to_string(mWorldPosition.y));
         // mWorldPosition = camera.ToWorld(mCameraPosition);
     }
+
+
+
+    // mCameraPosition = camera.ToCamera(mWorldPosition);
+
+    // Vec2f mousePos = ToVec2f(ImGui::GetMousePos());
+
+    // // check if we were clicked
+
+    // if (CheckLeftClick(camera) && SelectState::Dragged != mSelectState) {
+    //     // we were clicked
+    //     // check if we were being dragged as well
+
+    //     mDragOffset = (mousePos - mCameraPosition);
+
+    //     mSelectState = SelectState::Selected;
+
+    //     if (0.0f != mDragOffset.x || 0.0f != mDragOffset.y) {
+    //         mSelectState = SelectState::Dragged;
+    //     }
+    // } else if (CheckHover(camera) && SelectState::Dragged != mSelectState) {
+        
+    //     // we are being hovered
+    //     mSelectState = SelectState::Hovered;
+
+    // }
+    // // else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) || SelectState::Hovered == mSelectState) {
+    // //     // the user either clicked off (selected/dragged)
+    // //     // or moved the mouse away (hovered)
+    // //     mSelectState = SelectState::Deselected; 
+    // // }
+
+    // else if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+    //     mSelectState = SelectState::Deselected;
+    // }
+
+    // // adjust position while being dragged
+
+    // if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && SelectState::Dragged == mSelectState) {
+    //     mCameraPosition = mousePos + mDragOffset;
+    //     mWorldPosition = camera.ToWorld(mCameraPosition);
+    //     // mWorldPosition.x = camera.ToWorld(mousePos).x + mDragOffset.x;
+    //     // mWorldPosition.y = camera.ToWorld(mousePos).y + mDragOffset.y;
+    //     // mWorldPosition = camera.ToWorld(mCameraPosition);
+    // }
+
+    // // check if we are finally in a "selected" state
+
+    // if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && SelectState::Dragged == mSelectState) {
+    //     mSelectState = SelectState::Selected;
+    //     // mWorldPosition = camera.ToWorld(mCameraPosition);
+    // }
 }
 
 void LE_Selectable::Draw(const Camera& camera, SDL_Renderer* renderer) {

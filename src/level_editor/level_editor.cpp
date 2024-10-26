@@ -26,7 +26,7 @@ LevelEditor::LevelEditor() {
 
 LevelEditor::~LevelEditor() {
     mLevelList.clear();
-    mGimmickSelectables.clear();
+    ClearSelectables();
 }
 
 void LevelEditor::Run() {
@@ -49,7 +49,7 @@ void LevelEditor::Run() {
     mWindowHovered = ImGui::IsWindowHovered();
     mWindowFocused = ImGui::IsWindowFocused();
 
-    Render();
+    UpdateLevel();
 
 
     if (!mCurrentLevelPath.empty() && FileIndicesValid()) {
@@ -256,7 +256,7 @@ void LevelEditor::UpdateCamera(SDL_Event& event) {
     }
 }
 
-void LevelEditor::Render() {
+void LevelEditor::UpdateLevel() {
     if (!mLevelOpen && FileIndicesValid()) {
         return;
     }
@@ -281,9 +281,28 @@ void LevelEditor::Render() {
         SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
     }
 
-    if (!mGimmickSelectables.empty()) {
-        mGimmickSelectables[0].Update(mCamera, renderer);
-    }    
+    // for (auto i = 0; i < mCurrentMapbin.GetNumGimmicks(); i++) {
+    //     auto& gmk = mCurrentMapbin.GetGimmick(i);
+    //     auto& sel = mGimmickSelectables[i];
+
+    //     sel.Update(mCamera, renderer);
+
+    //     if (LE_Selectable::SelectState::Selected == sel.GetState()) {
+    //         mSelectedGimmickSelectables.push_back(i);
+    //     }
+    // }
+
+
+    if (0 != mCurrentMapbin.GetNumGimmicks()) {
+        auto& gmk = mCurrentMapbin.GetGimmick(0);
+        auto& sel = mGimmickSelectables[0];
+        sel.Update(mCamera, renderer);
+        if (LE_Selectable::SelectState::Selected == sel.GetState()) {
+            mSelectedGimmickSelectables.push_back(0);
+        }
+    }
+    DisplayEntityOptions();
+
     
     // for (auto& gmk : mGimmickSelectables) {
     //     gmk.Update(mCamera, renderer);
@@ -323,4 +342,35 @@ void LevelEditor::Render() {
     );
 
     SDL_SetRenderTarget(renderer, nullptr);
+}
+
+void LevelEditor::DisplayEntityOptions() {
+
+    // gimmicks   
+    if (1 == mSelectedGimmickSelectables.size()) {
+        // int index = mSelectedGimmickSelectables[0];
+
+        // auto& sel = mGimmickSelectables[index];
+        // auto& gmk = mCurrentMapbin.GetGimmick(index);
+
+        // // draw settings
+
+        // ImGui::Begin("Gimmick Settings");
+        // ImGui::Text(std::string("Name: " + gmk.GetName()).c_str());
+        
+        // Vec2f pos = sel.GetPosition();
+
+        // ImGui::InputFloat("X pos", &pos.x);
+        // ImGui::InputFloat("Y pos", &pos.y);
+
+        // gmk.SetPosition(pos);
+        // sel.SetPosition(pos);
+
+
+        // ImGui::End();
+
+        // clear indices
+        mSelectedGimmickSelectables.clear();
+    }
+
 }

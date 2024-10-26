@@ -37,10 +37,11 @@ private:
     void Menu();
     void OpenByName();
     void OpenByArchive();
-    void Render();
+    void UpdateLevel();
     void ProcessLevelContents();
     void ShowFiles();
-
+    void DisplayEntityOptions();
+    
     bool FileIndicesValid() {
         if (-1 == mCurrentFileIndex.mEnbinIndex || -1 == mCurrentFileIndex.mMapbinIndex) {
             return false;
@@ -63,8 +64,7 @@ private:
     }
 
     void ClearSelectables() {
-        mSelectedSelectables.clear();
-        
+        mSelectedGimmickSelectables.clear();
         mGimmickSelectables.clear();
     }
 
@@ -83,5 +83,5 @@ private:
     bool mWindowFocused;
     bool mWindowHovered;
     std::vector<LE_Selectable> mGimmickSelectables;
-    std::vector<LE_Selectable*> mSelectedSelectables;
+    std::vector<int> mSelectedGimmickSelectables;
 };

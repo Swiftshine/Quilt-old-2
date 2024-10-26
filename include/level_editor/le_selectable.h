@@ -19,11 +19,12 @@ public:
     void Update(const Camera& camera, SDL_Renderer* renderer);
 
     inline bool CheckHover(const Camera& camera) {
-        Vec2f mousePos = ToVec2f(ImGui::GetMousePos());
+        Vec2f mousePos = camera.MouseToWorld();
+        
         // camera.ToWorld(mousePos);
 
-        return mousePos.x >= mCameraPosition.x && mousePos.x <= (mCameraPosition.x + mDimensions.x) &&
-           mousePos.y >= mCameraPosition.y && mousePos.y <= (mCameraPosition.y + mDimensions.y);
+        return mousePos.x >= camera.mPosition.x && mousePos.x <= (camera.mPosition.x + mDimensions.x) &&
+           mousePos.y >= camera.mPosition.y && mousePos.y <= (camera.mPosition.y + mDimensions.y);
     }
 
 

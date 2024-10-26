@@ -49,7 +49,24 @@ struct RGBA {
     };
 };
 
+class Vec2f;
+
 struct Vec3f {
+    Vec3f(float nx, float ny, float nz) {
+        x = nx;
+        y = ny;
+        z = nz;
+    }
+
+    Vec3f() {
+        x = 0;
+        y = 0;
+        z = 0;
+    }
+
+    Vec3f(const Vec2f& other);
+
+
     f32 x, y, z;
 };
 
@@ -134,6 +151,12 @@ struct Vec2f {
 
 inline Vec2f ToVec2f(const ImVec2 vec) {
     return Vec2f(vec.x, vec.y);
+}
+
+inline Vec3f::Vec3f(const Vec2f& other) {
+    x = other.x;
+    y = other.y;
+    z = 0;
 }
 
 

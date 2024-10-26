@@ -211,7 +211,7 @@ void Mapdata::Mapbin::FileWrapper::Read(const std::vector<char>& data) {
             params.SetStringParam(j, CharArrayToString(info.mParams.mStringParams[j], sizeof(string64)));
         }
 
-        wrapper.SetPosition( {SwapF32(info.mPosition.x), SwapF32(info.mPosition.y), SwapF32(info.mPosition.z)} );
+        wrapper.SetPosition( Vec3f(SwapF32(info.mPosition.x), SwapF32(info.mPosition.y), SwapF32(info.mPosition.z)) );
     }
 
     
