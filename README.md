@@ -1,3 +1,6 @@
+# Notice
+This repository is no longer maintained. See the new version of Quilt [https://github.com/Swiftshine/Quilt](here).
+
 # Quilt
 A <em>Kirby's Epic Yarn</em> (Wii) modding tool for various aspects of the game.
 
